@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "310944500274",
+    "project_id": "smile-1af0b",
+    "storage_bucket": "smile-1af0b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310944500274:android:71292cedbf7201b9248a2b",
+        "android_client_info": {
+          "package_name": "com.vttechnologies.smile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "310944500274-kr47vng5afbceljv7sq7sqj69so3am22.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRmddrWVPcESdhJ23eFxZGu2hTvyKu_0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "310944500274-kr47vng5afbceljv7sq7sqj69so3am22.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

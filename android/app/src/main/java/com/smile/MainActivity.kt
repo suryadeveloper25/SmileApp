@@ -1,4 +1,4 @@
-package com.smile
+package com.vttechnologies.smile
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
