@@ -205,6 +205,37 @@ const todayTestReport = testReport.filter(item => {
   );
 });
 
+
+const getLatestSubjectMarks = (data) => {
+  const map = new Map();
+
+  data.forEach(item => {
+    const key = item.sub_name;
+
+    // keep latest entry (based on test_mark_Id or test_date)
+    if (
+      !map.has(key) ||
+      Number(item.test_mark_Id) > Number(map.get(key).test_mark_Id)
+    ) {
+      map.set(key, item);
+    }
+  });
+
+  return Array.from(map.values());
+};
+
+const removeExamDuplicateBySubject = (data) => {
+  const map = new Map();
+
+  data.forEach(item => {
+    // subject_id is the unique key
+    map.set(item.subject_id, item);
+  });
+
+  // keeps LAST occurrence automatically
+  return Array.from(map.values());
+};
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -349,7 +380,10 @@ const todayTestReport = testReport.filter(item => {
                <Text style={{flex:1, fontFamily: fonts.ROBOTO_BOLD,marginLeft:5,left:5}}>Grade</Text>
 
               </View>
-              {progressReport.map((item, index) => (
+              
+              {/* {progressReport.map((item, index) => ( */}
+              {removeExamDuplicateBySubject(progressReport).map((item, index) => (
+
                 <View
               key={index}
               style={[
@@ -379,7 +413,8 @@ const todayTestReport = testReport.filter(item => {
           <View style={{marginTop:10,alignItems:'center',justifyContent:'center'}}>
        
         <BarChart
-          data={progressReport.map((item) => ({
+     
+          data={removeExamDuplicateBySubject(progressReport).map((item) => ({
             value: Number(item.total_mark),
             label: item.sub_name,
             frontColor: "#784EB1",
@@ -444,7 +479,7 @@ const todayTestReport = testReport.filter(item => {
         onChange={(item) => {
           setSelectedTest(item.value);
           setTestName(item.label);
-           setTestReport([]);
+          //  setTestReport([]);
         }}
       />
 
@@ -482,7 +517,8 @@ const todayTestReport = testReport.filter(item => {
                <Text style={{flex:1, fontFamily: fonts.ROBOTO_BOLD,marginLeft:5,left:5}}>Grade</Text> */}
 
               </View>
-             {todayTestReport.map((item, index) => (
+             {/* {todayTestReport.map((item, index) => ( */}
+{getLatestSubjectMarks(todayTestReport).map((item, index) => (
 
                 <View
               key={index}

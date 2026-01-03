@@ -198,7 +198,7 @@ const Logout = async () => {
           setCustomAlertVisible(true)
         )}
 
-        <Text style={styles.versionLabel}>VT Technologies SMILE v1.3</Text>
+        <Text style={styles.versionLabel}>VT Technologies SMILE v14.6</Text>
       </View>
 
       {/* ================= LOGOUT MODAL ================= */}

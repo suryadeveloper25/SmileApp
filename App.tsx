@@ -12,8 +12,11 @@ import { store } from './root/store';
 import MainScreen from './Screen';
 import usePushNotification from './Screen/PushNotification';
 import FlashMessage from 'react-native-flash-message';
+import useInAppUpdate from './Screen/hooks/useInAppUpdate';
+
 const App = () => {
   usePushNotification()
+  	useInAppUpdate();
 	return (
 		<Provider store={store}>
 			<MainScreen />

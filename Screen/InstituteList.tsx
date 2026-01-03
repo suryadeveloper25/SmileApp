@@ -620,50 +620,50 @@ const InstituteListScreen: React.FC = () => {
   //   }, []);
 
 
-  let backHandlerAdded = useRef(false);
+  // let backHandlerAdded = useRef(false);
 
-  const checkForUpdate = async () => {
-    try {
-      const currentVersion = VersionCheck.getCurrentVersion();
-      const latestVersion = await VersionCheck.getLatestVersion({
-        provider: 'playStore',
-      });
+  // const checkForUpdate = async () => {
+  //   try {
+  //     const currentVersion = VersionCheck.getCurrentVersion();
+  //     const latestVersion = await VersionCheck.getLatestVersion({
+  //       provider: 'playStore',
+  //     });
 
-      const updateInfo = await VersionCheck.needUpdate({
-        currentVersion,
-        latestVersion,
-      });
+  //     const updateInfo = await VersionCheck.needUpdate({
+  //       currentVersion,
+  //       latestVersion,
+  //     });
 
-      console.log('Current:', currentVersion);
-      console.log('Latest:', latestVersion);
-      console.log('Need Update:', updateInfo.isNeeded);
+  //     console.log('Current:', currentVersion);
+  //     console.log('Latest:', latestVersion);
+  //     console.log('Need Update:', updateInfo.isNeeded);
 
-      if (updateInfo.isNeeded) {
-        if (!backHandlerAdded.current) {
-          BackHandler.addEventListener('hardwareBackPress', () => true);
-          backHandlerAdded.current = true;
-        }
+  //     if (updateInfo.isNeeded) {
+  //       if (!backHandlerAdded.current) {
+  //         BackHandler.addEventListener('hardwareBackPress', () => true);
+  //         backHandlerAdded.current = true;
+  //       }
 
-        Alert.alert(
-          'Update Required 🚨',
-          'A newer version of SMILE app is available. Please update to continue.',
-          [
-            {
-              text: 'UPDATE NOW',
-              onPress: () => {
-                Linking.openURL(updateInfo.storeUrl);
-                // Removed: BackHandler.exitApp(); – Let the OS handle update and restart
-              },
-            },
-          ],
-          { cancelable: false }
-        );
-      }
-    } catch (error) {
-      console.log('Version Check Error:', error);
-      Alert.alert('Error', 'Unable to check for updates. Please ensure you have an internet connection and try again.');
-    }
-  };
+  //       Alert.alert(
+  //         'Update Required 🚨',
+  //         'A newer version of SMILE app is available. Please update to continue.',
+  //         [
+  //           {
+  //             text: 'UPDATE NOW',
+  //             onPress: () => {
+  //               Linking.openURL(updateInfo.storeUrl);
+  //               // Removed: BackHandler.exitApp(); – Let the OS handle update and restart
+  //             },
+  //           },
+  //         ],
+  //         { cancelable: false }
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.log('Version Check Error:', error);
+  //     Alert.alert('Error', 'Unable to check for updates. Please ensure you have an internet connection and try again.');
+  //   }
+  // };
 
 
   useEffect(() => {
@@ -671,17 +671,17 @@ const InstituteListScreen: React.FC = () => {
       setLoading(true);
       await requestPermissions();
       await loadInstitutes();
-      await checkForUpdate();
+      // await checkForUpdate();
       setLoading(false);
     };
     init();
 
-    return () => {
-      if (backHandlerAdded.current) {
-        BackHandler.removeEventListener('hardwareBackPress', () => true);
-        backHandlerAdded.current = false;
-      }
-    };
+    // return () => {
+    //   if (backHandlerAdded.current) {
+    //     BackHandler.removeEventListener('hardwareBackPress', () => true);
+    //     backHandlerAdded.current = false;
+    //   }
+    // };
   }, []);
 
   useFocusEffect(
