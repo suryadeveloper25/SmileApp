@@ -345,23 +345,19 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
-  // FlatList,
-  Image,
   ActivityIndicator,
   StyleSheet,
-  // ScrollView,
   TouchableOpacity,
   FlatList,
   Alert,
   Modal,
 } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import MapView, {
   Marker,
   Polyline,
   PROVIDER_GOOGLE,
   AnimatedRegion,
-  Polygon,
 } from 'react-native-maps';
 import axios from "axios";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -369,7 +365,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { fonts, hp, normalize, wp } from "../root/config";
 import { Calendar, } from 'react-native-calendars';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Dropdown } from "react-native-element-dropdown";
 import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
 
 
