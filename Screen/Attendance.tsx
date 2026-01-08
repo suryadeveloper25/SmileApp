@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator, Alert, Dimensions, TouchableOpacity, } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Alert, Dimensions, TouchableOpacity, StatusBar, } from 'react-native';
 import { Card, Divider, } from 'react-native-paper';
 import { PieChart } from 'react-native-gifted-charts';
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -14,6 +14,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { SafeAreaView } from "react-native-safe-area-context";
 interface AttendanceProps {
   route: any;
 };
@@ -131,8 +132,8 @@ const AttendanceScreen: React.FC<AttendanceProps> = ({ route }) => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#830009' }}>
-      {/* Header */}
+    <SafeAreaView style={{ flex: 1,backgroundColor:'#7c43bd' }}>
+      
       <View style={styles.container}>
 
 

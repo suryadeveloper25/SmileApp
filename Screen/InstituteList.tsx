@@ -433,7 +433,6 @@ import {
   Alert,
   BackHandler,
   Modal,
-  SafeAreaView,
   StyleSheet,
   Dimensions,
   Linking,
@@ -454,6 +453,7 @@ import { fonts } from "../root/config";
 import { useDispatch } from "react-redux";
 import { logoutAction } from "../root/userAction";
 import { RFValue } from 'react-native-responsive-fontsize';
+import { SafeAreaView } from "react-native-safe-area-context";
 const { width, height } = Dimensions.get("window");
 const wp = (p: number) => (width * p) / 100;
 const hp = (p: number) => (height * p) / 100;
@@ -742,7 +742,7 @@ const InstituteListScreen: React.FC = () => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 ,backgroundColor:'#6A11CB'}}>
       <LinearGradient
         start={{ x: 0.0, y: 0.25 }}
         end={{ x: 0.5, y: 1.0 }}
@@ -831,7 +831,7 @@ const InstituteListScreen: React.FC = () => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'row', }}>
               <MaterialIcons name="crisis-alert" size={28} style={styles.icon2} />
               <Text style={styles.modalTitle}>Confirm Exit</Text>
             </View>
@@ -898,12 +898,11 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
   modalContent1: {
-    width: '80%',
-    height: '22%',
-    backgroundColor: '#fbfbfbff',
-    borderRadius: 12,
-    padding: RFValue(5),
-    alignItems: 'center',
+  width: wp(80),
+    backgroundColor: "#fbfbfbff",
+    borderRadius: wp(4),
+    padding: wp(5),
+    alignItems: "center",
   },
   modalMessage: {
     fontSize: RFValue(14),

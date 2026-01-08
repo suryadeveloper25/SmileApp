@@ -44,6 +44,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { parseNotifyDate } from '../Screen/badgeService';
 import StopListScreen from '../Screen/Listview';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Dimensions } from 'react-native';
 
 const Stack = createStackNavigator<ApplicationStackParamList>();
 
@@ -105,6 +107,7 @@ const HomeTab: React.FC = ({ route }) => {
 
   // const [notifyList, setNotifyList] = useState<any[]>([]);
    const [badgeCount, setBadgeCount] = useState(0);
+     const insets = useSafeAreaInsets();
 
 // const fetchNotificationList = async () => {
 //   try {
@@ -166,84 +169,101 @@ const HomeTab: React.FC = ({ route }) => {
     setBadgeCount(0);
   };
 
-  return <TabNavigator.Navigator initialRouteName='Home' screenOptions={{
-    headerShown: false,
-    tabBarActiveTintColor: '#ffffffff',        // Active icon/text color
-    tabBarInactiveTintColor: '#8e8e93',      // Inactive icon/text color
-    tabBarStyle: {
-      // backgroundColor: 'purple',
-      // borderWidth: 1,
-      // borderColor: 'purple',
-      // width: '100%',
-      // alignSelf: 'center',
-      // position: 'absolute',
-      // height: 60,
-      backgroundColor: '#220876ff',
-      borderWidth: scale(1),
-      borderColor: '#220876ff',
-      width: '100%',
-      alignSelf: 'center',
-      position: 'absolute',
-      height: verticalScale(65),
-      // bottom: verticalScale(12),
 
-    },
 
-    tabBarLabelStyle: {
-      fontSize: moderateScale(10),
-      fontFamily: fonts.FONT_MEDIUM
-    },
-  }}>
 
-    <TabNavigator.Screen name='Home' component={HomeScreen}
-      initialParams={{ orgid, studentId, mobile }}
-      options={{
+  return (
+    <TabNavigator.Navigator 
+      initialRouteName='Home' 
+      screenOptions={{
         headerShown: false,
-        tabBarLabel: 'Home', tabBarIcon: ({ color, size }) => {
-          return <MaterialIcons name="home" color={color} size={size} />
+        tabBarActiveTintColor: '#ffffffff',
+        tabBarInactiveTintColor: '#8e8e93',
+        tabBarStyle: {
+          backgroundColor: '#220876ff',
+          borderTopWidth: 0,
+          position: 'absolute',
+          bottom: 0, // 🔥 Critical: pin to bottom
+          left: 0,
+          right: 0,
+          height: 65 + (insets.bottom || 10), // 🔥 Add safe area
+          paddingBottom: insets.bottom || 10, // 🔥 Padding for home indicator
+          paddingTop: 8,
+          paddingHorizontal: 0,
+          elevation: 0,
+          borderTopColor: 'transparent',
         },
-      }}
-    />
-    <TabNavigator.Screen name="Attendance" component={AttendanceScreen}
-      initialParams={{ orgid, studentId, mobile }}
-      options={{
-        headerShown: false,
-        tabBarLabel: 'Attendance', tabBarIcon: ({ color, size }) => {
-          return <MaterialIcons name="checklist-rtl" color={color} size={size} />
-        },
-      }} />
-    <TabNavigator.Screen name="Profile" component={ProfileScreen}
-      initialParams={{ orgid, studentId, mobile }}
-      options={{
-        headerShown: false,
-        tabBarLabel: 'Profile', tabBarIcon: ({ color, size }) => {
-          return <MaterialIcons name="person" color={color} size={size} />
-        },
-      }} />
-    <TabNavigator.Screen
-      name="Notification"
-      component={NotificationScreen}
-      initialParams={{
-        orgid,
-        studentId,
-        mobile,
-        clearBadge,  // 👉 pass function
-      }}
-      options={{
-        tabBarLabel: 'Notification',
-        tabBarBadge: badgeCount > 0 ? badgeCount : undefined,
-        tabBarBadgeStyle: {
-          backgroundColor: 'red',
-          color: '#fff',
+        tabBarLabelStyle: {
           fontSize: 10,
+          fontFamily: fonts.FONT_MEDIUM,
+          marginBottom: 2,
         },
-        tabBarIcon: ({ color, size }) => (
-          <MaterialIcons name="notifications" color={color} size={size} />
-        ),
+        tabBarItemStyle: {
+          paddingVertical: 5,
+        },
       }}
-    />
-  </TabNavigator.Navigator>
-}
+    >
+      <TabNavigator.Screen 
+        name='Home' 
+        component={HomeScreen}
+        initialParams={{ orgid, studentId, mobile }}
+        options={{
+          tabBarLabel: 'Home', 
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="home" color={color} size={24} />
+          ),
+        }}
+      />
+      
+      <TabNavigator.Screen 
+        name="Attendance" 
+        component={AttendanceScreen}
+        initialParams={{ orgid, studentId, mobile }}
+        options={{
+          tabBarLabel: 'Attendance', 
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="checklist-rtl" color={color} size={24} />
+          ),
+        }} 
+      />
+      
+      <TabNavigator.Screen 
+        name="Profile" 
+        component={ProfileScreen}
+        initialParams={{ orgid, studentId, mobile }}
+        options={{
+          tabBarLabel: 'Profile', 
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="person" color={color} size={24} />
+          ),
+        }} 
+      />
+      
+      <TabNavigator.Screen
+        name="Notification"
+        component={NotificationScreen}
+        initialParams={{ orgid, studentId, mobile, clearBadge }}
+        options={{
+          tabBarLabel: 'Notification',
+          tabBarBadge: badgeCount > 0 ? badgeCount : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: 'red',
+            color: '#fff',
+            fontSize: 9,
+            minWidth: 16,
+            height: 16,
+            borderRadius: 8,
+            top: 2,
+          },
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="notifications" color={color} size={24} />
+          ),
+        }}
+      />
+    </TabNavigator.Navigator>
+  );
+};
+
 
 
 const Drawer = createDrawerNavigator<DrawerNaviagtorParamList>();

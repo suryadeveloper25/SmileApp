@@ -1,13 +1,14 @@
 
 
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Calendar, CalendarList } from 'react-native-calendars';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import moment from "moment";
 import { fonts } from "../root/config";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface CalendarScreenProps {
   route: any;
@@ -124,7 +125,7 @@ const CalendarScreen: React.FC<CalendarScreenProps> = ({ route, navigation }) =>
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#7c43bd'}}>
       {/* Header */}
       <View style={styles.container}>
         <View style={styles.header}>

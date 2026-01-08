@@ -1,12 +1,10 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  SafeAreaView,
   View,
   Text,
   StyleSheet,
-  Image, TouchableOpacity, FlatList,
-  TextInput,
+  Image, TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
 import { Divider } from 'react-native-paper';
@@ -16,6 +14,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { fonts } from "../root/config";
+import { SafeAreaView } from "react-native-safe-area-context";
 interface ExamScreenScreenProps {
   route: any
   navigation: any
@@ -103,7 +102,9 @@ const ExamScreen: React.FC<ExamScreenScreenProps> = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{flex:1,backgroundColor:'#7c43bd'}}>
+      <View  style={styles.container}>
+
       {/* Header */}
       <View style={styles.headerBox}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -252,6 +253,7 @@ const ExamScreen: React.FC<ExamScreenScreenProps> = ({ route, navigation }) => {
         )}
 
       </View>
+          </View>
     </SafeAreaView>
   );
 };

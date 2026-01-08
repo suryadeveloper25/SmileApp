@@ -6,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
   Image,
   TouchableWithoutFeedback,
   Keyboard,
@@ -30,6 +29,7 @@ import { fonts } from '../root/config';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { showMessage } from 'react-native-flash-message';
  import messaging from '@react-native-firebase/messaging';
+import { SafeAreaView } from 'react-native-safe-area-context';
 const { width, height } = Dimensions.get('window');
 
 interface ResetPasswordScreenProps {
@@ -474,7 +474,7 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route, naviga
 export default ResetPasswordScreen;
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#830009' },
+  safeArea: { flex: 1, backgroundColor: '#730673ff' },
   container: { flex: 1, backgroundColor: '#fff' },
 
   header: {

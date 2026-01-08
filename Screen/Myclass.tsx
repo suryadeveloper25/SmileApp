@@ -6,10 +6,7 @@ import {
   Text,
   FlatList,
   StyleSheet,
-  SafeAreaView,
-  // ScrollView,
   TouchableOpacity,
-  StatusBar,
   ActivityIndicator,
   ScrollView,
   Image,
@@ -27,6 +24,7 @@ import {
 } from 'react-native-responsive-screen';
 import Collapsible from "react-native-collapsible";
 import { fonts } from "../root/config";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 interface MyclassScreenProps {
@@ -98,7 +96,7 @@ const MyclassScreen: React.FC<MyclassScreenProps> = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, }}>
+    <SafeAreaView style={{ flex: 1,backgroundColor:'#7c43bd'}}>
 
       <View style={styles.container}>
         <View style={styles.headerBox}>

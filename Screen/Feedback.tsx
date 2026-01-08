@@ -167,8 +167,8 @@ const FeedbackScreen: React.FC<FeedbackScreenProps> = ({ route, navigation }) =>
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
+    <SafeAreaView style={{flex:1,backgroundColor:'#7c43bd'}} >
+      <View style={styles.container}>
       
         <View style={styles.headerBox}>
           <TouchableOpacity onPress={() => navigation.goBack()}>

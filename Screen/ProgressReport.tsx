@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import {
-  SafeAreaView,
   View,
   Text,
   StyleSheet,
@@ -24,6 +23,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { SafeAreaView } from "react-native-safe-area-context";
 // import { BarChart } from "react-native-gifted-charts";
 
   // const DropdownSection = [
@@ -237,7 +237,9 @@ const removeExamDuplicateBySubject = (data) => {
 };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={{flex:1, backgroundColor:'#7c43bd'}}>
+      <View  style={styles.container}>
+
       {/* Header */}
       <View style={styles.headerBox}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -372,9 +374,9 @@ const removeExamDuplicateBySubject = (data) => {
 
          {progressReport.length > 0 ? (
             <View style={styles.tableContainer}>
-              <View style={{flexDirection:'row',padding:2,justifyContent:'space-between',}}>
+              <View style={{flexDirection:'row',padding:1,justifyContent:'space-between',}}>
                <Text style={{flex:2, fontFamily: fonts.ROBOTO_BOLD}}>Subject</Text>
-               <Text style={{flex:1, fontFamily: fonts.ROBOTO_BOLD,marginLeft:15,left:5}}>Max</Text>
+               <Text style={{flex:1, fontFamily: fonts.ROBOTO_BOLD,marginLeft:10,left:5}}>Max</Text>
                <Text style={{flex:1, fontFamily: fonts.ROBOTO_BOLD,}}>Scored</Text>
                <Text style={{flex:1, fontFamily: fonts.ROBOTO_BOLD,left:5}}>Result</Text>
                <Text style={{flex:1, fontFamily: fonts.ROBOTO_BOLD,marginLeft:5,left:5}}>Grade</Text>
@@ -576,7 +578,7 @@ const removeExamDuplicateBySubject = (data) => {
     </>
   )}
       </View>
-      
+          </View>
     </SafeAreaView>
   );
 };

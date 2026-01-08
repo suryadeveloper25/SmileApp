@@ -1,12 +1,13 @@
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet, Image, SafeAreaView, ScrollView, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet, Image, ScrollView, Dimensions } from 'react-native';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
 import { Divider } from 'react-native-paper';
 import { fonts } from '../root/config';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const { width, height } = Dimensions.get("window");
@@ -165,7 +166,7 @@ const FeesScreen: React.FC<FeesScreenprops> = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, }}>
+    <SafeAreaView style={{ flex: 1,backgroundColor:'#7c43bd' }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
           {/* Header */}

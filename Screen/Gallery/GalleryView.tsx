@@ -72,7 +72,7 @@ const GalleryImageScreen: React.FC<GalleryImageViewerProps> = ({ route, navigati
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 ,backgroundColor:'#9C27B0'}}>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>

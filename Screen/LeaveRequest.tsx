@@ -119,7 +119,7 @@ const LeavesScreen: React.FC<leaveRequestProps> = ({ route, navigation }) => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#830009', }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#7c43bd', }}>
       <View style={styles.container}>
 
         <View style={styles.header}>

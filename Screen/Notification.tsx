@@ -1,7 +1,7 @@
 
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, Image, ActivityIndicator, FlatList, Linking, } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, ActivityIndicator, FlatList, Linking, } from 'react-native';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -10,6 +10,7 @@ import Sound from 'react-native-sound';
 import { useFocusEffect } from '@react-navigation/native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import notifee, { EventType } from '@notifee/react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface NotificationScreenProps {
   route: any;
@@ -268,7 +269,7 @@ const isValidAudioUrl = (url?: string) => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#830009', }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#7c43bd', }}>
       <View style={styles.container}>
         <View style={styles.headerBar}>
           <TouchableOpacity onPress={() => navigation.goBack()}>

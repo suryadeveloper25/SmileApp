@@ -12,6 +12,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import notifee, { EventType } from '@notifee/react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 interface HomeworkScreenProps {
   route: any;
   navigation: any
@@ -257,6 +258,7 @@ const HomeworkScreen: React.FC<HomeworkScreenProps> = ({ route, navigation }) =>
   }
 
   return (
+    <SafeAreaView style={{flex:1, backgroundColor:'#7c43bd'}}>
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
@@ -389,6 +391,7 @@ const HomeworkScreen: React.FC<HomeworkScreenProps> = ({ route, navigation }) =>
 
 
     </View>
+    </SafeAreaView>
   );
 };
 

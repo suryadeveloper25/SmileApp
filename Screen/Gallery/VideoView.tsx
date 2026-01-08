@@ -9,7 +9,6 @@ import {
   ScrollView,
   Image,
   Dimensions,
-  SafeAreaView,
   FlatList,
   ActivityIndicator,
 } from 'react-native';
@@ -20,9 +19,141 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import Video from "react-native-video";
 import { fonts } from "../../root/config";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");
 
+// interface VideoViewScreenProps {
+//   route: any
+//   navigation: any
+// }
+// const VideoViewScreen: React.FC<VideoViewScreenProps> = ({ route, navigation }) => {
+//   const { orgid, studentId, mobile, acaid, catid, } = route.params;
+//   const [studentData, setStudentData] = useState({});
+//   const [loading, setLoading] = useState(true);
+//   const [vidList, setVidList] = useState([]);
+//   const [isFolder, setIsFolder] = useState("");
+
+//   // Fetch student data
+//   const getStudentData = async () => {
+//     try {
+//       const loggedIn = await AsyncStorage.getItem("isloggedIn");
+//       const mobileNo = await AsyncStorage.getItem("mobile");
+
+//       const response = await axios.post(
+//         `https://www.vtsmile.in/app/api/students/students_profile_data_api?orgId=${orgid}&studeId=${studentId}&mobile_no=${mobileNo}`
+//       );
+
+//       if (response.data.isSuccess && response.data.studDetails) {
+//         setStudentData(response.data.studDetails[0]);
+//       }
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
+
+//   // Fetch videos list
+//   const getVideosList = async () => {
+//     try {
+//       const response = await axios.post(
+//         `https://www.vtsmile.in/app/api/students/video_gallery_api?orgId=${orgid}&aca_id=${acaid}&category_id=${catid}`
+//       );
+// console.log("response.data.galleryVideo==>",response.data.galleryVideo)
+//       if (response.data.isSuccess && response.data.galleryVideo) {
+//         setVidList(response.data.galleryVideo);
+//       } else {
+//         setIsFolder("No Data");
+//       }
+//     } catch (err) {
+//       console.log(err);
+//       setIsFolder("No Data");
+//     }
+//   };
+
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       await getStudentData();
+//       await getVideosList();
+//       setLoading(false);
+//     };
+//     fetchData();
+//   }, []);
+
+
+
+//   const renderVideoItem = ({ item }) => (
+//     <View style={styles.videoContainer}>
+//       <Video
+//         source={{ uri: item.img_file_name }}
+//         style={styles.video}
+//         controls
+//         resizeMode="cover"
+//       />
+//     </View>
+//   );
+//   if (loading) {
+//     return (
+//       <View style={styles.loader}>
+//         <ActivityIndicator size="large" color="#7200b1" />
+//       </View>
+//     );
+//   }
+
+
+//   return (
+//     <SafeAreaView style={{ flex: 1,backgroundColor:'#9C27B0' }}>
+//       {/* Header */}
+//       <View style={styles.container}>
+//         <View style={styles.header}>
+//           <TouchableOpacity onPress={() => navigation.goBack()}>
+//             <Icon name="arrow-back" size={24} color="#fff" />
+//           </TouchableOpacity>
+//           <Text style={styles.headerText}>Gallery - Videos</Text>
+//         </View>
+
+//         {/* Content */}
+
+
+
+//         <View style={styles.albumContainer}>
+//           <Icon name="image" size={24} color="#2a2a2aff" />
+//           <Text style={styles.albumTitle}>Video - {item.img_title}({item.lemgth})</Text>
+//           <Divider style={{ backgroundColor: '#f26767ff', height: 1, marginHorizontal: -13, bottom: 10 }} />
+//           <ScrollView contentContainerStyle={styles.content}>
+//             <View style={styles.folderGrid}>
+
+//               <FlatList
+//                 data={vidList}
+//                 renderItem={renderVideoItem}
+//                 keyExtractor={(item, index) => index.toString()}
+//                 numColumns={2}
+//                 columnWrapperStyle={{ justifyContent: "space-between" }}
+//                 contentContainerStyle={{ paddingBottom: 10 }}
+//               />
+
+//             </View>
+//           </ScrollView>
+//           <View>
+
+//             <TouchableOpacity
+//               onPress={() => {
+//                 setLoading(true);
+//                 getVideosList().then(() => setLoading(false));
+//               }}
+//             >
+//               <Text style={{ color: "blue", marginTop: 5, fontFamily: fonts.FONT_BOLD, }}>Reload</Text>
+//             </TouchableOpacity>
+//           </View>
+//         </View>
+//         <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('Gallery', { orgid, studentId, mobile })}>
+//           <MaterialIcons name="image" size={28} color="#fff" />
+//         </TouchableOpacity>
+//       </View>
+//     </SafeAreaView>
+//   );
+// };
+
+// export default VideoViewScreen;
 interface VideoViewScreenProps {
   route: any
   navigation: any
@@ -79,20 +210,6 @@ const VideoViewScreen: React.FC<VideoViewScreenProps> = ({ route, navigation }) 
     fetchData();
   }, []);
 
-
-  //   const renderImage = ({ item }) => (
-
-  //   <View style={styles.imageContainer}>
-  //     {item.source ? (
-  //       <Image source={item.source} style={styles.image} />
-  //     ) : (
-  //       <View style={styles.placeholder}>
-  //         <Icon name="person-circle-outline" size={60} color="#ccc" />
-  //       </View>
-  //     )}
-  //   </View>
-  // );
-
   const renderVideoItem = ({ item }) => (
     <View style={styles.videoContainer}>
       <Video
@@ -101,6 +218,7 @@ const VideoViewScreen: React.FC<VideoViewScreenProps> = ({ route, navigation }) 
         controls
         resizeMode="cover"
       />
+      <Text style={styles.videoTitle}>{item.img_title}</Text>
     </View>
   );
   if (loading) {
@@ -111,9 +229,12 @@ const VideoViewScreen: React.FC<VideoViewScreenProps> = ({ route, navigation }) 
     );
   }
 
+  // Get the category title from the first video item (if available)
+  const categoryTitle = vidList.length > 0 ? vidList[0].img_title : "Videos";
+  const videoCount = vidList.length;
 
   return (
-    <SafeAreaView style={{ flex: 1, }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#9C27B0' }}>
       {/* Header */}
       <View style={styles.container}>
         <View style={styles.header}>
@@ -124,40 +245,45 @@ const VideoViewScreen: React.FC<VideoViewScreenProps> = ({ route, navigation }) 
         </View>
 
         {/* Content */}
-
-
-
         <View style={styles.albumContainer}>
           <Icon name="image" size={24} color="#2a2a2aff" />
-          <Text style={styles.albumTitle}>Video - Demo(5)</Text>
+          <Text style={styles.albumTitle}>
+            Video - {categoryTitle} ({videoCount})
+          </Text>
           <Divider style={{ backgroundColor: '#f26767ff', height: 1, marginHorizontal: -13, bottom: 10 }} />
           <ScrollView contentContainerStyle={styles.content}>
             <View style={styles.folderGrid}>
-
-              <FlatList
-                data={vidList}
-                renderItem={renderVideoItem}
-                keyExtractor={(item, index) => index.toString()}
-                numColumns={2}
-                columnWrapperStyle={{ justifyContent: "space-between" }}
-                contentContainerStyle={{ paddingBottom: 10 }}
-              />
-
+              {vidList.length > 0 ? (
+                <FlatList
+                  data={vidList}
+                  renderItem={renderVideoItem}
+                  keyExtractor={(item, index) => index.toString()}
+                  numColumns={2}
+                  columnWrapperStyle={{ justifyContent: "space-between" }}
+                  contentContainerStyle={{ paddingBottom: 10 }}
+                />
+              ) : (
+                <Text style={styles.noDataText}>No videos available</Text>
+              )}
             </View>
           </ScrollView>
           <View>
-
             <TouchableOpacity
               onPress={() => {
                 setLoading(true);
                 getVideosList().then(() => setLoading(false));
               }}
             >
-              <Text style={{ color: "blue", marginTop: 5, fontFamily: fonts.FONT_BOLD, }}>Reload</Text>
+              <Text style={{ color: "blue", marginTop: 5, fontFamily: fonts.FONT_BOLD }}>
+                Reload
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
-        <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('Gallery', { orgid, studentId, mobile })}>
+        <TouchableOpacity 
+          style={styles.fab} 
+          onPress={() => navigation.navigate('Gallery', { orgid, studentId, mobile })}
+        >
           <MaterialIcons name="image" size={28} color="#fff" />
         </TouchableOpacity>
       </View>

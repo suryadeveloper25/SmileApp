@@ -131,7 +131,7 @@ const FeedbackNewScreen: React.FC<FeedbackNewScreenProps> = ({ route, navigation
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 ,backgroundColor:'#7c43bd'}}>
       <View style={styles.container}>
         {/* Student Info */}
 

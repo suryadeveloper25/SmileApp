@@ -5,7 +5,6 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
   StyleSheet,
   Image,
   TouchableOpacity,
@@ -26,6 +25,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { fonts } from '../root/config';
 import { clearNotification, getNotification } from './notificationStorage';
 import { navigate } from './navigationRef';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
@@ -155,6 +155,7 @@ const HomeScreen: React.FC<any> = ({ navigation, route }) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar backgroundColor="black" barStyle="light-content" />
+      <View style={{flex:1,backgroundColor:'#fff'}}>
       <View >
         <LinearGradient
           colors={['#220876ff', '#3621baff']}
@@ -269,6 +270,7 @@ const HomeScreen: React.FC<any> = ({ navigation, route }) => {
           </View>
         </Modal>
       </ScrollView>
+           </View>
     </SafeAreaView>
   );
 };
@@ -276,7 +278,7 @@ const HomeScreen: React.FC<any> = ({ navigation, route }) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#fff' },
+safeArea: { flex: 1, backgroundColor:"transparent" },
   header: {
     width: '100%',
     height: hp(8),

@@ -1,7 +1,7 @@
 
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, ActivityIndicator, TouchableOpacity, Image, } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Image, } from 'react-native';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import { Divider } from 'react-native-paper';
 import axios from 'axios';
@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { RFValue } from 'react-native-responsive-fontsize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { fonts } from '../root/config';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ProfileScreen = ({ route, navigation }: any) => {
   const { orgid, studentId, mobile } = route.params;
@@ -49,7 +50,7 @@ const ProfileScreen = ({ route, navigation }: any) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, }}>
+    <SafeAreaView style={{ flex: 1,backgroundColor:'#814fcb' }}>
       <View style={styles.container}>
 
         {/* Header */}

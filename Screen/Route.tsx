@@ -621,6 +621,8 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.main}>
+<View style={{flex:1,backgroundColor:'#fff'}}>
+
 
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
@@ -856,14 +858,14 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
 
 
       </View>
+      </View>
 
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  main: { flex: 1 },
-
+  main: { flex: 1 ,backgroundColor:'#7c43bd'},
   stopChip: {
     padding: 8,
     top: 5,

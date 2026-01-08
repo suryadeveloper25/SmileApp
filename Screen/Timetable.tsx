@@ -1,11 +1,12 @@
 
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, SafeAreaView, ActivityIndicator, Alert, Image, } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, Alert, Image, } from 'react-native';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import moment from 'moment';
 import { fonts } from '../root/config';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 interface TimetableProps {
@@ -106,7 +107,7 @@ const TimeTableScreen: React.FC<TimetableProps> = ({ route, navigation }) => {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#830009' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#7c43bd' }}>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>

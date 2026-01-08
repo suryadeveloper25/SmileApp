@@ -6,7 +6,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
   Image,
   TouchableWithoutFeedback,
   Keyboard,
@@ -27,6 +26,7 @@ import {
 import { fonts } from '../root/config';
 import { showMessage } from 'react-native-flash-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface AboutScreenProps {
   route: any;
@@ -78,7 +78,7 @@ const AboutScreen: React.FC<AboutScreenProps> = ({ route, navigation }) => {
         Keyboard.dismiss();
       }}
     >
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#830009' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#730673ff' }}>
         <View style={styles.container}>
           {/* Header */}
           <View style={styles.header}>

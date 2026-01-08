@@ -112,7 +112,7 @@ const GalleryImageCategoryScreen = ({ route }: any) => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#830009', }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#9C27B0' }}>
 
       <View style={styles.container}>
         {/* <Spinner visible={isLoading} textContent={"Loading..."} /> */}

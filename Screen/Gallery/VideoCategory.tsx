@@ -113,7 +113,7 @@ const VideoCategoryScreen = ({ route }) => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#830009', }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#9C27B0' }}>
       {/* Header */}
       <View style={styles.container}>
         <View style={styles.header}>

@@ -113,6 +113,9 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ route, navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={() => { setShowDropdown(false); Keyboard.dismiss(); }}>
       <SafeAreaView style={styles.safeArea}>
+        <View style={{flex:1,backgroundColor:'#fff'}}>
+
+       
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.navigate('HomeTab', { orgid, studentId, mobile })}>
             <MaterialIcons name="arrow-back" size={RFValue(26)} color="#fff" />
@@ -230,13 +233,14 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ route, navigation }) => {
             </View>
           </View>
         </Modal>
+         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#fff' },
+  safeArea: { flex: 1, backgroundColor: '#730673ff' },
 
   header: {
     flexDirection: 'row',
@@ -250,7 +254,7 @@ const styles = StyleSheet.create({
     fontSize: wp('5.5%'),
     fontFamily: fonts.FONT_BOLD,
     color: '#fff',
-    marginLeft: wp('30%'),
+    marginLeft: wp('25%'),
   },
   profileWrapper: {
     marginLeft: 'auto',
