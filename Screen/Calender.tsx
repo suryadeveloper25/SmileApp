@@ -125,7 +125,7 @@ const CalendarScreen: React.FC<CalendarScreenProps> = ({ route, navigation }) =>
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'#7c43bd'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#7c43bd',marginBottom:-30}}>
       {/* Header */}
       <View style={styles.container}>
         <View style={styles.header}>

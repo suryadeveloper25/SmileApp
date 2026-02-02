@@ -35,7 +35,7 @@ type RootStackParamList = {
 
 const GalleryImageCategoryScreen = ({ route }: any) => {
   const { orgid, studentId, mobile, acaid } = route.params;
-  console.log(route.params, 'route.params')
+  // console.log(route.params, 'route.params')
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -112,7 +112,7 @@ const GalleryImageCategoryScreen = ({ route }: any) => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'#9C27B0' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#9C27B0' ,marginBottom:-30}}>
 
       <View style={styles.container}>
         {/* <Spinner visible={isLoading} textContent={"Loading..."} /> */}

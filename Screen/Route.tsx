@@ -341,6 +341,459 @@
 
 
 
+// import React, { useEffect, useState, useRef } from "react";
+// import {
+//   View,
+//   Text,
+//   ActivityIndicator,
+//   StyleSheet,
+//   TouchableOpacity,
+//   FlatList,
+//   Alert,
+//   Modal,
+// } from "react-native";
+
+// import MapView, {
+//   Marker,
+//   Polyline,
+//   PROVIDER_GOOGLE,
+//   AnimatedRegion,
+// } from 'react-native-maps';
+// import axios from "axios";
+// import Icon from "react-native-vector-icons/MaterialIcons";
+// import { SafeAreaView } from "react-native-safe-area-context";
+// import { fonts, hp, normalize, wp } from "../root/config";
+// import { Calendar } from 'react-native-calendars';
+// import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+// import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
+
+// interface BusRouteProps {
+//   route: any;
+//   navigation: any;
+// }
+
+// interface TrackingDetail {
+//   vehicle_track_Id: string;
+//   driver_Id: string;
+//   route_Id: string;
+//   stop_Id: string;
+//   stop_lat: string;
+//   stop_lng: string;
+//   reached_date: string;
+//   reached_time: string;
+//   route_name: string;
+//   stop_name: string;
+// }
+
+// const DEFAULT_COORDINATE = {
+//   latitude: 13.053215,
+//   longitude: 80.224194,
+// };
+
+// const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
+//   const { orgid, studentId, mobile } = route?.params || {};
+//   const mapRef = useRef<MapView>(null);
+//   const [tab, setTab] = useState("morning");
+//   const [loading, setLoading] = useState(true);
+//   const [showCalendar, setShowCalendar] = useState(false);
+//   const today = new Date().toISOString().split("T")[0];
+//   const [selectedDate, setSelectedDate] = useState<string>(today);
+//   const [showStopModal, setShowStopModal] = useState(false);
+//   const [selectedStop, setSelectedStop] = useState<any>(null);
+
+//   const [trackingData, setTrackingData] = useState<TrackingDetail[]>([]);
+//   const [routeName, setRouteName] = useState('');
+//   const [uniqueStops, setUniqueStops] = useState<any[]>([]);
+//   const [lastReachedStop, setLastReachedStop] = useState<any>(null);
+//   const [busLocation, setBusLocation] = useState<any>(null);
+
+//   const animatedCoordinate = useRef(
+//     new AnimatedRegion({
+//       latitude: DEFAULT_COORDINATE.latitude,
+//       longitude: DEFAULT_COORDINATE.longitude,
+//       latitudeDelta: 0,
+//       longitudeDelta: 0,
+//     })
+//   ).current;
+
+//   useEffect(() => {
+//     LocationServicesDialogBox.checkLocationServicesIsEnabled({
+//       message: `
+//       <h6 style="margin:0 0 8px 0;">For a better experience, your device will need to use Location Accuracy</h6>
+//       <p style="margin:8px 0;">The following settings should be on:</p>
+//       <ul style="padding-left:18px; margin:8px 0;">
+//         <h6><b>Device location</b></h6>
+//         <h6>Location Accuracy, which provides more accurate location for apps and services.</h6>
+//       </ul>
+//       <p style="font-size:13px;">
+//         You can change this at any time in location settings.
+//         <br/><br/>
+//         <a href="#" style="color:#4285F4;">Learn more</a>
+//       </p>
+//     `,
+//       ok: "Turn on",
+//       cancel: "No, thanks",
+//       enableHighAccuracy: true,
+//       showDialog: true,
+//       openLocationServices: true,
+//       preventOutSideTouch: false,
+//       preventBackClick: false,
+//       providerListener: false,
+//     })
+//       .then(success => console.log(success))
+//       .catch(error => console.log(error.message));
+
+//     return () => {
+//       LocationServicesDialogBox.stopListener();
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     loadTrackingDetails();
+//   }, [selectedDate, tab]);
+
+//   const loadTrackingDetails = async () => {
+//     try {
+//       setLoading(true);
+
+//       const url = `https://www.vtsmile.in/app/api/students/student_vehicle_tracking_api?orgId=${orgid}&studentId=${studentId}&date=${selectedDate}&trackingType=${tab}`;
+//       const result = await axios.post(url);
+
+//       if (result.data.isSuccess && result.data.tracking_details?.length > 0) {
+//         const details: TrackingDetail[] = result.data.tracking_details;
+//         setTrackingData(details);
+//         setRouteName(result.data.route_name || details[0]?.route_name || '');
+
+//         // Group stops by stop_Id to get unique stops with latest reached time
+//         const stopMap = new Map();
+
+//         details.forEach((item) => {
+//           const stopId = item.stop_Id;
+//           const existingStop = stopMap.get(stopId);
+
+//           // Keep the entry with the latest reached_time
+//           if (!existingStop || 
+//               (item.reached_time && item.reached_time > existingStop.reached_time)) {
+//             stopMap.set(stopId, {
+//               ...item,
+//               latitude: Number(item.stop_lat),
+//               longitude: Number(item.stop_lng),
+//               isReached: !!item.reached_time,
+//             });
+//           }
+//         });
+
+//         const stopsArray = Array.from(stopMap.values());
+//         setUniqueStops(stopsArray);
+
+//         // Find the last reached stop (most recent time)
+//         const reachedStops = stopsArray
+//           .filter(s => s.isReached)
+//           .sort((a, b) => {
+//             const timeA = a.reached_time || "00:00:00";
+//             const timeB = b.reached_time || "00:00:00";
+//             return timeB.localeCompare(timeA);
+//           });
+
+//         const lastStop = reachedStops[0];
+//         setLastReachedStop(lastStop);
+
+//         if (lastStop) {
+//           const busPos = {
+//             latitude: lastStop.latitude,
+//             longitude: lastStop.longitude,
+//           };
+//           setBusLocation(busPos);
+
+//           animatedCoordinate.timing({
+//             latitude: busPos.latitude,
+//             longitude: busPos.longitude,
+//             duration: 1000,
+//             useNativeDriver: false,
+//           }).start();
+//         }
+
+//         // Auto fit all stops on map
+//         const coordinates = stopsArray.map(s => ({
+//           latitude: s.latitude,
+//           longitude: s.longitude,
+//         }));
+
+//         setTimeout(() => {
+//           if (coordinates.length > 0) {
+//             mapRef.current?.fitToCoordinates(coordinates, {
+//               edgePadding: { top: 100, right: 100, bottom: 100, left: 100 },
+//               animated: true,
+//             });
+//           }
+//         }, 500);
+//       } else {
+//         setTrackingData([]);
+//         setUniqueStops([]);
+//         setLastReachedStop(null);
+//         setBusLocation(null);
+//       }
+//     } catch (err) {
+//       console.log("Error loading tracking details:", err);
+//       Alert.alert("Error", "Failed to load tracking data");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const getNextUnreachedStop = () => {
+//     return uniqueStops.find(stop => !stop.isReached);
+//   };
+
+//   if (loading) {
+//     return (
+//       <ActivityIndicator 
+//         size="large" 
+//         style={{ flex: 1, justifyContent: "center", alignItems: "center" }} 
+//       />
+//     );
+//   }
+
+//   return (
+//     <SafeAreaView style={styles.main}>
+//       <View style={{ flex: 1, backgroundColor: '#fff' }}>
+//         <View style={styles.header}>
+//           <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+//             <Icon name="arrow-back" size={normalize(22)} color="#fff" />
+//           </TouchableOpacity>
+//           <Text style={styles.headerTitle}>Bus Route</Text>
+//         </View>
+
+//         <View style={{ flex: 1, padding: 10 }}>
+//           {/* Date Selector */}
+//           <View style={styles.field}>
+//             <Text style={styles.label}>Select Date</Text>
+//             <TouchableOpacity
+//               style={styles.dropdown}
+//               onPress={() => setShowCalendar(!showCalendar)}
+//             >
+//               <MaterialIcons name="calendar-month" size={25} style={{ color: '#5d5959ff', top: 10 }} />
+//               <Text style={{ fontSize: 15, color: '#645f5fff', left: 35, bottom: 12 }}>
+//                 {selectedDate ? new Date(selectedDate).toDateString() : "Select Date"}
+//               </Text>
+//             </TouchableOpacity>
+
+//             {showCalendar && (
+//               <Calendar
+//                 onDayPress={(day) => {
+//                   setSelectedDate(day.dateString);
+//                   setShowCalendar(false);
+//                 }}
+//                 current={selectedDate || today}
+//                 markedDates={{
+//                   [selectedDate]: {
+//                     selected: true,
+//                     marked: true,
+//                     disableTouchEvent: true,
+//                     selectedColor: "orange",
+//                     selectedTextColor: "white",
+//                   },
+//                   ...(selectedDate !== today && {
+//                     [today]: {
+//                       customStyles: {
+//                         container: {
+//                           backgroundColor: '#3a0ee7ff',
+//                           borderRadius: 10,
+//                         },
+//                         text: {
+//                           color: '#fff',
+//                           fontWeight: 'bold',
+//                         },
+//                       },
+//                     },
+//                   }),
+//                 }}
+//                 markingType={'custom'}
+//               />
+//             )}
+//           </View>
+
+//           {/* Tab Buttons */}
+//           <View style={styles.tabWrapper}>
+//             <TouchableOpacity
+//               style={[styles.tabBtn, tab === "morning" && styles.tabActive]}
+//               onPress={() => setTab("morning")}
+//             >
+//               <Text style={[styles.tabText, tab === "morning" && styles.tabTextActive]}>
+//                 Morning
+//               </Text>
+//             </TouchableOpacity>
+
+//             <TouchableOpacity
+//               style={[styles.tabBtn, tab === "evening" && styles.tabActive]}
+//               onPress={() => setTab("evening")}
+//             >
+//               <Text style={[styles.tabText, tab === "evening" && styles.tabTextActive]}>
+//                 Evening
+//               </Text>
+//             </TouchableOpacity>
+//           </View>
+
+//           {/* Route Name Display */}
+//           {routeName && (
+//             <View style={styles.routeNameBox}>
+//               <Text style={styles.routeNameText}>Route: {routeName}</Text>
+//               {lastReachedStop && (
+//                 <Text style={styles.lastStopText}>
+//                   Last Stop: {lastReachedStop.stop_name} at {lastReachedStop.reached_time}
+//                 </Text>
+//               )}
+//             </View>
+//           )}
+
+//           {/* Map View */}
+//           <MapView
+//             ref={mapRef}
+//             provider={PROVIDER_GOOGLE}
+//             style={{ flex: 1, borderRadius: 12, marginTop: 10 }}
+//             initialRegion={{
+//               ...DEFAULT_COORDINATE,
+//               latitudeDelta: 0.05,
+//               longitudeDelta: 0.05,
+//             }}
+//             showsCompass={true}
+//           >
+//             {/* Draw polyline connecting all stops */}
+//             {uniqueStops.length > 1 && (
+//               <Polyline
+//                 coordinates={uniqueStops.map(s => ({
+//                   latitude: s.latitude,
+//                   longitude: s.longitude,
+//                 }))}
+//                 strokeWidth={4}
+//                 strokeColor="#1abc9c"
+//                 lineDashPattern={[10, 5]}
+//               />
+//             )}
+
+//             {/* Stop Markers */}
+//             {uniqueStops.map((item, index) => (
+//               <Marker
+//                 key={`${item.stop_Id}-${index}`}
+//                 coordinate={{
+//                   latitude: item.latitude,
+//                   longitude: item.longitude,
+//                 }}
+//                 title={item.stop_name}
+//                 description={
+//                   item.isReached
+//                     ? `Reached at ${item.reached_time}`
+//                     : "Not reached yet"
+//                 }
+//                 pinColor={item.isReached ? "green" : "red"}
+//                 onPress={() => {
+//                   setSelectedStop(item);
+//                   setShowStopModal(true);
+//                 }}
+//               />
+//             ))}
+
+//             {/* Bus Location (at last reached stop) */}
+//             {busLocation && (
+//               <Marker.Animated coordinate={animatedCoordinate}>
+//                 <Text style={{ fontSize: 35 }}>🚌</Text>
+//               </Marker.Animated>
+//             )}
+//           </MapView>
+
+//           {/* Horizontal Stop List */}
+//           <View style={{ height: 100, backgroundColor: "#fff", marginTop: 10 }}>
+//             <FlatList
+//               horizontal
+//               showsHorizontalScrollIndicator={false}
+//               data={uniqueStops}
+//               keyExtractor={(item, i) => `${item.stop_Id}-${i}`}
+//               contentContainerStyle={{ paddingHorizontal: 10 }}
+//               renderItem={({ item, index }) => (
+//                 <TouchableOpacity
+//                   onPress={() => {
+//                     setSelectedStop(item);
+//                     setShowStopModal(true);
+//                   }}
+//                   style={[
+//                     styles.stopChip,
+//                     item.isReached && styles.stopChipReached,
+//                     lastReachedStop?.stop_Id === item.stop_Id && styles.stopChipActive,
+//                   ]}
+//                 >
+//                   <Text style={styles.stopChipText} numberOfLines={1}>
+//                     {item.stop_name}
+//                   </Text>
+//                   {item.isReached && (
+//                     <Text style={styles.stopTimeText}>{item.reached_time}</Text>
+//                   )}
+//                   <Text style={{ fontSize: 10, color: "#555", marginTop: 2 }}>
+//                     {item.isReached ? "✓ Reached" : "⏳ Pending"}
+//                   </Text>
+//                 </TouchableOpacity>
+//               )}
+//             />
+//           </View>
+
+//           {/* Stop Details Modal */}
+//           <Modal visible={showStopModal} animationType="slide" transparent>
+//             <View style={styles.modalOverlay}>
+//               <View style={styles.modalBox}>
+//                 <Text style={styles.modalTitle}>
+//                   {selectedStop?.stop_name}
+//                 </Text>
+
+//                 <View style={styles.modalContent}>
+//                   <Text style={styles.modalLabel}>Route:</Text>
+//                   <Text style={styles.modalValue}>{selectedStop?.route_name}</Text>
+//                 </View>
+
+//                 <View style={styles.modalContent}>
+//                   <Text style={styles.modalLabel}>Status:</Text>
+//                   <Text style={[
+//                     styles.modalValue,
+//                     { color: selectedStop?.isReached ? "green" : "orange" }
+//                   ]}>
+//                     {selectedStop?.isReached ? "Reached" : "Not Reached"}
+//                   </Text>
+//                 </View>
+
+//                 {selectedStop?.isReached && (
+//                   <>
+//                     <View style={styles.modalContent}>
+//                       <Text style={styles.modalLabel}>Reached Time:</Text>
+//                       <Text style={styles.modalValue}>{selectedStop?.reached_time}</Text>
+//                     </View>
+
+//                     <View style={styles.modalContent}>
+//                       <Text style={styles.modalLabel}>Reached Date:</Text>
+//                       <Text style={styles.modalValue}>{selectedStop?.reached_date}</Text>
+//                     </View>
+//                   </>
+//                 )}
+
+//                 <View style={styles.modalContent}>
+//                   <Text style={styles.modalLabel}>Coordinates:</Text>
+//                   <Text style={styles.modalValue}>
+//                     {selectedStop?.latitude.toFixed(5)}, {selectedStop?.longitude.toFixed(5)}
+//                   </Text>
+//                 </View>
+
+//                 <TouchableOpacity
+//                   style={styles.modalBtn}
+//                   onPress={() => setShowStopModal(false)}
+//                 >
+//                   <Text style={{ color: "#fff", fontWeight: "bold" }}>Close</Text>
+//                 </TouchableOpacity>
+//               </View>
+//             </View>
+//           </Modal>
+//         </View>
+//       </View>
+//     </SafeAreaView>
+//   );
+// };
+
 import React, { useEffect, useState, useRef } from "react";
 import {
   View,
@@ -411,7 +864,7 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
   ).current;
   useEffect(() => {
     LocationServicesDialogBox.checkLocationServicesIsEnabled({
-      message: `
+          message: `
       <h6 style="margin:0 0 8px 0;">For a better experience, your device will need to use Location Accuracy</h6>
 
       <p style="margin:8px 0;">The following settings should be on:</p>
@@ -429,14 +882,14 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
         <a href="#" style="color:#4285F4;">Learn more</a>
       </p>
     `,
-      ok: "Turn on",
-      cancel: "No, thanks",
-      enableHighAccuracy: true,
-      showDialog: true,
-      openLocationServices: true,
-      preventOutSideTouch: false,
-      preventBackClick: false,
-      providerListener: false,
+          ok: "Turn on",
+          cancel: "No, thanks",
+          enableHighAccuracy: true,
+          showDialog: true,
+          openLocationServices: true,
+          preventOutSideTouch: false,
+          preventBackClick: false,
+          providerListener: false,
     })
       .then(success => console.log(success))
       .catch(error => console.log(error.message));
@@ -450,6 +903,9 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
   useEffect(() => {
     loadTrackingDetails();
   }, [selectedDate, tab]);
+  // useEffect(() => {
+  //   loadTrackingDetails();
+  // }, [selectedDate, tab]);
 
 
   const loadTrackingDetails = async () => {
@@ -501,9 +957,15 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
         }, 500);
       } else {
         setTrackingData([]);
+        //  Alert.alert("No Data", "No tracking data available for this date and time.");
       }
     } catch (err) {
       console.log(err);
+      Alert.alert(
+        "Error",
+        "Failed to load tracking data. Please check your connection and try again."
+      );
+      setTrackingData([]);
     } finally {
       setLoading(false);
     }
@@ -564,9 +1026,12 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
     return distanceKm * 1000 <= 100; // 📍 100 meters
   };
 
+  const alertedStopsRef = useRef<Set<number>>(new Set());
+
   const checkStopArrival = (busLat: number, busLng: number) => {
     trackingData.forEach((stop, index) => {
       if (reachedStopsRef.current.has(index)) return;
+      if (alertedStopsRef.current.has(index)) return; // Don't alert again
 
       if (
         isBusNearStop(
@@ -577,17 +1042,64 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
         )
       ) {
         reachedStopsRef.current.add(index);
+        alertedStopsRef.current.add(index);
 
         Alert.alert(
           "🚌 Bus Arrived",
-          `Bus has reached ${stop.stop_name}`
+          `Bus has reached ${stop.stop_name}`,
+          [{ text: "OK" }]
         );
       }
     });
   };
+  // const checkStopArrival = (busLat: number, busLng: number) => {
+  //   trackingData.forEach((stop, index) => {
+  //     if (reachedStopsRef.current.has(index)) return;
 
+  //     if (
+  //       isBusNearStop(
+  //         busLat,
+  //         busLng,
+  //         Number(stop.latitude),
+  //         Number(stop.longitude)
+  //       )
+  //     ) {
+  //       reachedStopsRef.current.add(index);
+
+  //       Alert.alert(
+  //         "🚌 Bus Arrived",
+  //         `Bus has reached ${stop.stop_name}`
+  //       );
+  //     }
+  //   });
+  // };
+
+
+  // const getStopStatus = (item: any, index: number) => {
+  //   if (reachedStopsRef.current.has(index)) {
+  //     return {
+  //       text: `Reached at ${item.reached_time || "--"}`,
+  //       color: "green",
+  //     };
+  //   }
+
+  //   if (busLocation) {
+  //     return {
+  //       text: `ETA ${calculateETA(
+  //         busLocation.latitude,
+  //         busLocation.longitude,
+  //         Number(item.latitude),
+  //         Number(item.longitude)
+  //       )}`,
+  //       color: "#ff9800",
+  //     };
+  //   }
+
+  //   return { text: "Upcoming", color: "#999" };
+  // };
 
   const getStopStatus = (item: any, index: number) => {
+    // Already reached
     if (reachedStopsRef.current.has(index)) {
       return {
         text: `Reached at ${item.reached_time || "--"}`,
@@ -595,22 +1107,26 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
       };
     }
 
-    if (busLocation) {
-      return {
-        text: `ETA ${calculateETA(
-          busLocation.latitude,
-          busLocation.longitude,
-          Number(item.latitude),
-          Number(item.longitude)
-        )}`,
-        color: "#ff9800",
-      };
+    // Next stop (upcoming)
+    if (busLocation && !reachedStopsRef.current.has(index)) {
+      const nextStopIndex = getNextStopIndex();
+
+      // Only show ETA for next stop or upcoming stops
+      if (index >= nextStopIndex) {
+        return {
+          text: `ETA ${calculateETA(
+            busLocation.latitude,
+            busLocation.longitude,
+            Number(item.latitude),
+            Number(item.longitude)
+          )}`,
+          color: "#ff9800",
+        };
+      }
     }
 
     return { text: "Upcoming", color: "#999" };
   };
-
-
 
   if (loading) {
     return <ActivityIndicator size="large" style={{ flex: 1, justifyContent: "center", alignItems: "center" }} />;
@@ -621,146 +1137,146 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.main}>
-<View style={{flex:1,backgroundColor:'#fff'}}>
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
 
 
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-          <Icon name="arrow-back" size={normalize(22)} color="#fff" />
-        </TouchableOpacity>
-
-        <Text style={styles.headerTitle}>Bus Route</Text>
-      </View>
-
-
-
-      <View style={{ flex: 1, padding: 10 }}>
-
-
-        <View style={styles.field}>
-          <Text style={styles.label}>Select Date</Text>
-          <TouchableOpacity
-            style={styles.dropdown}
-            onPress={() => setShowCalendar(!showCalendar)}
-          >
-            <MaterialIcons name="calendar-month" size={25} style={{ color: '#5d5959ff', top: 10 }} />
-            <Text style={{ fontSize: 15, color: '#645f5fff', left: 35, bottom: 12 }}>
-              {selectedDate ? new Date(selectedDate).toDateString() : "Select Date"}
-            </Text>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
+            <Icon name="arrow-back" size={normalize(22)} color="#fff" />
           </TouchableOpacity>
 
-          {showCalendar && (
-            <Calendar
-              onDayPress={(day) => {
-                setSelectedDate(day.dateString);
-                setHomeworkDate(new Date(day.dateString));
-                setShowCalendar(false);
-              }}
+          <Text style={styles.headerTitle}>Bus Route</Text>
+        </View>
 
-              current={selectedDate || today}
-              markedDates={{
-                [selectedDate]: {
-                  selected: true,
-                  marked: true,
-                  disableTouchEvent: true,
-                  selectedColor: "orange",
-                  selectedTextColor: "white",
-                },
-                ...(selectedDate !== today && {
-                  [today]: {
-                    customStyles: {
-                      container: {
-                        backgroundColor: '#3a0ee7ff',
-                        borderRadius: 10,
-                      },
-                      text: {
-                        color: '#fff',
-                        fontWeight: 'bold',
+
+
+        <View style={{ flex: 1, padding: 10 }}>
+
+
+          <View style={styles.field}>
+            <Text style={styles.label}>Select Date</Text>
+            <TouchableOpacity
+              style={styles.dropdown}
+              onPress={() => setShowCalendar(!showCalendar)}
+            >
+              <MaterialIcons name="calendar-month" size={25} style={{ color: '#5d5959ff', top: 10 }} />
+              <Text style={{ fontSize: 15, color: '#645f5fff', left: 35, bottom: 12 }}>
+                {selectedDate ? new Date(selectedDate).toDateString() : "Select Date"}
+              </Text>
+            </TouchableOpacity>
+
+            {showCalendar && (
+              <Calendar
+                onDayPress={(day) => {
+                  setSelectedDate(day.dateString);
+                  setHomeworkDate(new Date(day.dateString));
+                  setShowCalendar(false);
+                }}
+
+                current={selectedDate || today}
+                markedDates={{
+                  [selectedDate]: {
+                    selected: true,
+                    marked: true,
+                    disableTouchEvent: true,
+                    selectedColor: "orange",
+                    selectedTextColor: "white",
+                  },
+                  ...(selectedDate !== today && {
+                    [today]: {
+                      customStyles: {
+                        container: {
+                          backgroundColor: '#3a0ee7ff',
+                          borderRadius: 10,
+                        },
+                        text: {
+                          color: '#fff',
+                          fontWeight: 'bold',
+                        },
                       },
                     },
-                  },
-                }),
-              }}
-              markingType={'custom'}
-            />
-          )}
-        </View>
-
-        <View >
-
-          {/* TAB BUTTONS */}
-          <View style={styles.tabWrapper}>
-            <TouchableOpacity
-              style={[styles.tabBtn, tab === "morning" && styles.tabActive]}
-              onPress={() => setTab("morning")}
-            >
-              <Text style={[styles.tabText, tab === "morning" && styles.tabTextActive]}>
-                Morning
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.tabBtn, tab === "Evening" && styles.tabActive]}
-              onPress={() => setTab("Evening")}
-            >
-              <Text style={[styles.tabText, tab === "Evening" && styles.tabTextActive]}>
-                Evening
-              </Text>
-            </TouchableOpacity>
+                  }),
+                }}
+                markingType={'custom'}
+              />
+            )}
           </View>
 
-        </View>
+          <View >
 
-        <MapView
-          ref={mapRef}
-          provider={PROVIDER_GOOGLE}
-          style={{ flex: 1 }}
-          initialRegion={{
-            ...DEFAULT_COORDINATE,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-          }}
-          showsCompass={true}
-        >
+            {/* TAB BUTTONS */}
+            <View style={styles.tabWrapper}>
+              <TouchableOpacity
+                style={[styles.tabBtn, tab === "morning" && styles.tabActive]}
+                onPress={() => setTab("morning")}
+              >
+                <Text style={[styles.tabText, tab === "morning" && styles.tabTextActive]}>
+                  Morning
+                </Text>
+              </TouchableOpacity>
 
-          {path.length > 1 && (
-            <Polyline
-              coordinates={path}
-              strokeWidth={5}
-              strokeColor="#1abc9c"
-            />
-          )}
-          {trackingData.map((item, index) => {
-            const isReached = reachedStopsRef.current.has(index);
+              <TouchableOpacity
+                style={[styles.tabBtn, tab === "evening" && styles.tabActive]}
+                onPress={() => setTab("evening")}
+              >
+                <Text style={[styles.tabText, tab === "evening" && styles.tabTextActive]}>
+                  Evening
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-            return (
-              <Marker
-                key={index}
-                coordinate={{
-                  latitude: Number(item.latitude),
-                  longitude: Number(item.longitude),
-                }}
-                title={item.stop_name}
-                description={
-                  isReached
-                    ? `Reached at ${item.reached_time}`
-                    : `ETA: ${busLocation
-                      ? calculateETA(
-                        busLocation.latitude,
-                        busLocation.longitude,
-                        Number(item.latitude),
-                        Number(item.longitude)
-                      )
-                      : "--"
-                    }`
-                }
-                pinColor={isReached ? "green" : "red"}   // ✅ MARKING
+          </View>
+
+          <MapView
+            ref={mapRef}
+            provider={PROVIDER_GOOGLE}
+            style={{ flex: 1 }}
+            initialRegion={{
+              ...DEFAULT_COORDINATE,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}
+            showsCompass={true}
+          >
+
+            {path.length > 1 && (
+              <Polyline
+                coordinates={path}
+                strokeWidth={5}
+                strokeColor="#1abc9c"
               />
-            );
-          })}
+            )}
+            {trackingData.map((item, index) => {
+              const isReached = reachedStopsRef.current.has(index);
+
+              return (
+                <Marker
+                  key={index}
+                  coordinate={{
+                    latitude: Number(item.latitude),
+                    longitude: Number(item.longitude),
+                  }}
+                  title={item.stop_name}
+                  description={
+                    isReached
+                      ? `Reached at ${item.reached_time}`
+                      : `ETA: ${busLocation
+                        ? calculateETA(
+                          busLocation.latitude,
+                          busLocation.longitude,
+                          Number(item.latitude),
+                          Number(item.longitude)
+                        )
+                        : "--"
+                      }`
+                  }
+                  pinColor={isReached ? "green" : "red"}   // ✅ MARKING
+                />
+              );
+            })}
 
 
-          {/* {trackingData.map((item, index) => (
+            {/* {trackingData.map((item, index) => (
   <Marker
     key={index}
     coordinate={{
@@ -771,93 +1287,94 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
     description={`Reached at ${item.reached_time}`}
   />
 ))} */}
-          {busLocation && (
-            <Marker.Animated coordinate={animatedCoordinate}>
-              <Text style={{ fontSize: 35 }}>🚌</Text>
-            </Marker.Animated>
-          )}
+            {busLocation && (
+              <Marker.Animated coordinate={animatedCoordinate}>
+                <Text style={{ fontSize: 35 }}>🚌</Text>
+              </Marker.Animated>
+            )}
 
 
 
-        </MapView>
+          </MapView>
 
-        {/* 🔵 HORIZONTAL STOP LIST */}
-        <View style={{ height: 90, backgroundColor: "#fff" }}>
-          <FlatList
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            data={trackingData}
-            keyExtractor={(_, i) => i.toString()}
-            contentContainerStyle={{ paddingHorizontal: 10 }}
-            renderItem={({ item, index }) => {
-              const isActive = selectedStopIndex === index;
-              const isReached = reachedStopsRef.current.has(index);
+          {/* 🔵 HORIZONTAL STOP LIST */}
+          <View style={{ height: 90, backgroundColor: "#fff" }}>
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              data={trackingData}
+              keyExtractor={(_, i) => i.toString()}
+              contentContainerStyle={{ paddingHorizontal: 10 }}
+              renderItem={({ item, index }) => {
+                const isActive = selectedStopIndex === index;
+                const isReached = reachedStopsRef.current.has(index);
 
-              return (
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("StopListScreen", {
-                      trackingData,
-                      busLocation,
-                      reachedStops: Array.from(reachedStopsRef.current),
-                    })
-                  }
+                return (
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("StopListScreen", {
+                        trackingData,
+                        busLocation,
+                        reachedStops: Array.from(reachedStopsRef.current),
+                        selectedStopIndex: index,
+                      })
+                    }
 
-                  style={[
-                    styles.stopChip,
-                    isActive && styles.stopChipActive,
-                    isReached && styles.stopChipReached,
-                  ]}
-                >
-                  <Text style={styles.stopChipText}>{item.stop_name}</Text>
-                  <Text style={styles.stopChipText}>{item.reached_time}</Text>
+                    style={[
+                      styles.stopChip,
+                      isActive && styles.stopChipActive,
+                      isReached && styles.stopChipReached,
+                    ]}
+                  >
+                    <Text style={styles.stopChipText}>{item.stop_name}</Text>
+                    <Text style={styles.stopChipText}>{item.reached_time}</Text>
 
-                  <Text style={{ fontSize: 11, color: "#555" }}>
-                    {isReached ? "Reached" : "Upcoming"}
-                  </Text>
-                </TouchableOpacity>
-
-
-              );
-            }}
-          />
-        </View>
+                    <Text style={{ fontSize: 11, color: "#555" }}>
+                      {isReached ? "Reached" : "Upcoming"}
+                    </Text>
+                  </TouchableOpacity>
 
 
+                );
+              }}
+            />
+          </View>
 
 
 
-        <Modal visible={showStopModal} animationType="slide" transparent>
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalBox}>
 
-              {/* <Image
+
+          <Modal visible={showStopModal} animationType="slide" transparent>
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalBox}>
+
+                {/* <Image
         source={require("../assets/bus_stop.png")} // add image
         style={styles.modalImage}
         resizeMode="contain"
       /> */}
 
-              <Text style={styles.modalTitle}>
-                {selectedStop?.stop_name}
-              </Text>
+                <Text style={styles.modalTitle}>
+                  {selectedStop?.stop_name}
+                </Text>
 
-              <Text style={styles.modalText}>
-                Reached Time: {selectedStop?.reached_time || "Not yet"}
-              </Text>
+                <Text style={styles.modalText}>
+                  Reached Time: {selectedStop?.reached_time || "Not yet"}
+                </Text>
 
-              <TouchableOpacity
-                style={styles.modalBtn}
-                onPress={() => setShowStopModal(false)}
-              >
-                <Text style={{ color: "#fff", fontWeight: "bold" }}>Close</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalBtn}
+                  onPress={() => setShowStopModal(false)}
+                >
+                  <Text style={{ color: "#fff", fontWeight: "bold" }}>Close</Text>
+                </TouchableOpacity>
 
+              </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
 
 
-      </View>
+        </View>
       </View>
 
     </SafeAreaView>
@@ -865,7 +1382,7 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  main: { flex: 1 ,backgroundColor:'#7c43bd'},
+  main: { flex: 1, backgroundColor: '#7c43bd' },
   stopChip: {
     padding: 8,
     top: 5,

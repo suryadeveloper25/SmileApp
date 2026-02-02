@@ -500,7 +500,7 @@ const StudentsListScreen = ({ route, navigation }) => {
       const response = await axios.post(
         `https://www.vtsmile.in/app/api/students/institute_student_list?orgId=${orgid}&studeId=${studentId}&mobile_no=${mobile}`
       );
-      console.log(' response.data.studList=>', response.data.studList)
+      // console.log(' response.data.studList=>', response.data.studList)
       if (response.data.isSuccess && response.data.studList) {
         setStudentsList(response.data.studList);
         const firstStudent = response.data.studList[0];
@@ -826,7 +826,7 @@ const styles = StyleSheet.create({
   },
   modalContent1: {
     width: '80%',
-    height: '22%',
+    height: '28%',
     backgroundColor: '#fbfbfbff',
     borderRadius: 12,
     padding: RFValue(5),

@@ -107,7 +107,7 @@ const TimeTableScreen: React.FC<TimetableProps> = ({ route, navigation }) => {
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#7c43bd' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#7c43bd' ,marginBottom:-30}}>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>

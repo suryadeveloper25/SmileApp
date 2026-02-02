@@ -99,7 +99,7 @@ const VideoMainScreen = ({ route }) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'#9C27B0' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#9C27B0',marginBottom:-30 }}>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>

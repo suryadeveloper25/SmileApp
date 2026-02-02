@@ -240,7 +240,7 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#730673ff' },
+  safeArea: { flex: 1, backgroundColor: '#730673ff',marginBottom:-30 },
 
   header: {
     flexDirection: 'row',

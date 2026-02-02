@@ -117,12 +117,17 @@ const logIn = async () => {
     }
 
     // Save token to Firebase Token API
-    const tokenAPIUrl = "https://www.vtsmile.in/app/api/students/fbase_token_api";
-
-    await axios.post(tokenAPIUrl, {
-      mobile_no: mobile,
-      token: token,      // FIXED
-    });
+    // const tokenAPIUrl = "https://www.vtsmile.in/app/api/students/fbase_token_api";
+    // await axios.post(tokenAPIUrl, {
+    //   mobile_no: mobile,
+    //   token: token,      // FIXED
+    // });
+    const fbaseTokenUrl = `https://www.vtsmile.in/app/api/students/fbase_token_api?mobile_no=${encodeURIComponent(mobile)}&token=${encodeURIComponent(token)}`;
+    const fbaseRes = await axios.post(fbaseTokenUrl);
+ 
+    if (!fbaseRes.data?.isSuccess && !fbaseRes.data?.isSuceess) {
+      console.warn("fbase_token_api might have failed, but continuing...");
+    }
 
     // Prepare FormData for student_token_save_api
     const tokenForm = new FormData();

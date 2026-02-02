@@ -278,7 +278,7 @@ const HomeScreen: React.FC<any> = ({ navigation, route }) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-safeArea: { flex: 1, backgroundColor:"transparent" },
+safeArea: { flex: 1},
   header: {
     width: '100%',
     height: hp(8),

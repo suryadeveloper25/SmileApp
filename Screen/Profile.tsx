@@ -25,7 +25,7 @@ const ProfileScreen = ({ route, navigation }: any) => {
 
       const url = `https://www.vtsmile.in/app/api/students/students_profile_data_api?orgId=${orgid}&studeId=${studentId}&mobile_no=${savedMobile || mobile}`;
       const response = await axios.post(url);
-      console.log('=========response.data.studDetailssphoto=====>', response.data.studDetails)
+      // console.log('=========response.data.studDetailssphoto=====>', response.data.studDetails)
       if (response.data.isSuccess && response.data.studDetails?.length > 0) {
         setStudent(response.data.studDetails[0]);
       }

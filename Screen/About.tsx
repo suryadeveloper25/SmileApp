@@ -78,7 +78,7 @@ const AboutScreen: React.FC<AboutScreenProps> = ({ route, navigation }) => {
         Keyboard.dismiss();
       }}
     >
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#730673ff' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#730673ff',marginBottom:-30  }}>
         <View style={styles.container}>
           {/* Header */}
           <View style={styles.header}>

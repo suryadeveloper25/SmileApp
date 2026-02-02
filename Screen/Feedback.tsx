@@ -167,7 +167,7 @@ const FeedbackScreen: React.FC<FeedbackScreenProps> = ({ route, navigation }) =>
   );
 
   return (
-    <SafeAreaView style={{flex:1,backgroundColor:'#7c43bd'}} >
+    <SafeAreaView style={{flex:1,backgroundColor:'#7c43bd',marginBottom:-25}} >
       <View style={styles.container}>
       
         <View style={styles.headerBox}>
@@ -255,15 +255,13 @@ const styles = StyleSheet.create({
   },
   backBtn: { marginLeft: 10, },
   listContainer: {
-    maxHeight: '80%',
+    maxHeight: '75%',
     marginTop: 20,
     width: '95%', 
     paddingVertical: 5,
     marginHorizontal: 8,
     borderWidth: 1,
     borderColor: '#ccc',
-    // borderTopLeftRadius:10,
-    // borderTopRightRadius:10,
     borderRadius: 10,
     backgroundColor: '#e3f3ff',
   },
@@ -317,7 +315,7 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: "absolute",
-    bottom: 30,
+    bottom: 80,
     right: 20,
     backgroundColor: "#7852b1",
     width: 60,

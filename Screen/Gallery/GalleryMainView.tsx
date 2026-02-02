@@ -107,7 +107,7 @@ const GalleryMainScreen: React.FC<GalleryImageMainProps> = ({ route, navigation 
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'#9C27B0' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor:'#9C27B0',marginBottom:-30 }}>
       {/* Header */}
       <View style={styles.container}>
         <View style={styles.header}>

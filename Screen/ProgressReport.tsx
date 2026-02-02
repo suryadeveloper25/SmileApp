@@ -237,7 +237,7 @@ const removeExamDuplicateBySubject = (data) => {
 };
 
   return (
-    <SafeAreaView style={{flex:1, backgroundColor:'#7c43bd'}}>
+    <SafeAreaView style={{flex:1, backgroundColor:'#7c43bd',marginBottom:-30}}>
       <View  style={styles.container}>
 
       {/* Header */}
@@ -445,7 +445,7 @@ const removeExamDuplicateBySubject = (data) => {
 
   {selectedItem === 'Daily Test' && (
     <>
-       {/* <ScrollView contentContainerStyle={{ paddingBottom: 200 }}> */}
+       <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
     
     <View style={styles.profileCard}>
  
@@ -574,7 +574,7 @@ const removeExamDuplicateBySubject = (data) => {
          </ScrollView>
       </>
       </View>
-   {/* </ScrollView> */}
+   </ScrollView>
     </>
   )}
       </View>

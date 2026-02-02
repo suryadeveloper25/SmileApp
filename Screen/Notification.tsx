@@ -19,7 +19,7 @@ interface NotificationScreenProps {
 
 const NotificationScreen: React.FC<NotificationScreenProps> = ({ route, navigation }) => {
   const { orgid, studentId, mobile, clearBadge ,notificationData  } = route?.params || {};
-    console.log('📦 Notification Data:', notificationData);
+    // console.log('📦 Notification Data:', notificationData);
   const [tab, setTab] = useState('Other');
   const [loading, setLoading] = useState(true);
 
@@ -75,7 +75,7 @@ const NotificationScreen: React.FC<NotificationScreenProps> = ({ route, navigati
       const response = await axios.post(
         `https://www.vtsmile.in/app/api/students/notification_list_api?orgId=${orgid}&mobile_no=${mobile}&studId=${studentId}`
       );
-      console.log('response.data.notify_list1234', response.data.notify_list)
+      // console.log('response.data.notify_list1234', response.data.notify_list)
       if (response.data.isSuccess) {
         setNotifyList(response.data.notify_list || []);
       }
@@ -90,7 +90,7 @@ const NotificationScreen: React.FC<NotificationScreenProps> = ({ route, navigati
       const response = await axios.post(
         `https://www.vtsmile.in/app/api/students/pdf_notification_list_api?orgId=${orgid}&mobile_no=${mobile}&studId=${studentId} `
       );
-      console.log('response.data.pdf_notify_list===', response.data.pdf_notify_list)
+      // console.log('response.data.pdf_notify_list===', response.data.pdf_notify_list)
       if (response.data.isSuccess && response.data.pdf_notify_list?.length) {
         setPDFNotifyList(response.data.pdf_notify_list);
       }
@@ -411,7 +411,7 @@ const isValidAudioUrl = (url?: string) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', width: "100%", },
+  container: { flex: 1, backgroundColor: '#ffffff', width: "100%", },
   headerBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -546,7 +546,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginHorizontal: 8,
     marginTop: 0, borderWidth: 1, borderColor: '#72736fff',
-    padding: 10, marginBottom: 70
+    padding: 10, marginBottom: 80
   },
   cardContainer: {
     marginVertical: 8,

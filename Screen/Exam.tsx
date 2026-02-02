@@ -5,7 +5,8 @@ import {
   Text,
   StyleSheet,
   Image, TouchableOpacity,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView
 } from 'react-native';
 import { Divider } from 'react-native-paper';
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -102,7 +103,7 @@ const ExamScreen: React.FC<ExamScreenScreenProps> = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={{flex:1,backgroundColor:'#7c43bd'}}>
+    <SafeAreaView style={{flex:1,backgroundColor:'#7c43bd',marginBottom:-30}}>
       <View  style={styles.container}>
 
       {/* Header */}
@@ -113,12 +114,12 @@ const ExamScreen: React.FC<ExamScreenScreenProps> = ({ route, navigation }) => {
         <Text style={styles.progressText}>Examinations</Text>
 
       </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{paddingBottom:100}}
+          // bounces={true}
+        >
       <View style={styles.profileCard}>
-        {/* <View style={styles.starsRow}>
-          <Icon name="star" size={20} color="#FFD700" />
-          <Icon name="star" size={20} color="#FFD700" />
-          <Icon name="star" size={20} color="#FFD700" />
-          </View> */}
         <Text style={styles.studentName}>{studentData.stud_name?.toUpperCase()}</Text>
         <Text style={styles.classText}>Class: {studentData.std_name} {studentData.section} | Roll No: {studentData.rollNo}</Text>
       </View>
@@ -253,6 +254,7 @@ const ExamScreen: React.FC<ExamScreenScreenProps> = ({ route, navigation }) => {
         )}
 
       </View>
+      </ScrollView>
           </View>
     </SafeAreaView>
   );

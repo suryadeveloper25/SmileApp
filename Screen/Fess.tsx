@@ -166,7 +166,7 @@ const FeesScreen: React.FC<FeesScreenprops> = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1,backgroundColor:'#7c43bd' }}>
+    <SafeAreaView style={{ flex: 1,backgroundColor:'#7c43bd',marginBottom:-30 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
           {/* Header */}

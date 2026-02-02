@@ -72,7 +72,7 @@ const GalleryImageScreen: React.FC<GalleryImageViewerProps> = ({ route, navigati
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 ,backgroundColor:'#9C27B0'}}>
+    <SafeAreaView style={{ flex: 1 ,backgroundColor:'#9C27B0',marginBottom:-30}}>
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -118,7 +118,7 @@ const GalleryImageScreen: React.FC<GalleryImageViewerProps> = ({ route, navigati
         />
         <TouchableOpacity
           style={{
-            position: 'absolute', bottom: 20, right: 20, backgroundColor: '#784EB1',
+            position: 'absolute', bottom: 50, right: 20, backgroundColor: '#784EB1',
             padding: 12, borderRadius: 30
           }}
           onPress={() => navigation.navigate('Video', { orgid, studentId, mobile })}
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
 
   fab: {
     position: 'absolute',
-    bottom: 90,
+    bottom: 120,
     right: 22,
     backgroundColor: '#9B59B6',
     width: 56, height: 56,

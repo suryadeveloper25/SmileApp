@@ -96,7 +96,7 @@ const MyclassScreen: React.FC<MyclassScreenProps> = ({ route, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1,backgroundColor:'#7c43bd'}}>
+    <SafeAreaView style={{ flex: 1,backgroundColor:'#7c43bd',marginBottom:-30}}>
 
       <View style={styles.container}>
         <View style={styles.headerBox}>
