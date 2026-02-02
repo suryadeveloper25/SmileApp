@@ -53,13 +53,13 @@ const useInAppUpdate = (): void => {
                 const lastCheckTime = await AsyncStorage.getItem(LAST_CHECK_KEY);
                 const now = Date.now();
 
-                // if (lastCheckTime) {
-                //     const timeSinceLastCheck = now - parseInt(lastCheckTime, 10);
-                //     if (timeSinceLastCheck < UPDATE_CHECK_INTERVAL) {
-                //         console.log(`⏰ Update checked ${Math.round(timeSinceLastCheck / 1000 / 60)} minutes ago. Skipping.`);
-                //         return;
-                //     }
-                // }
+                if (lastCheckTime) {
+                    const timeSinceLastCheck = now - parseInt(lastCheckTime, 10);
+                    if (timeSinceLastCheck < UPDATE_CHECK_INTERVAL) {
+                        console.log(`⏰ Update checked ${Math.round(timeSinceLastCheck / 1000 / 60)} minutes ago. Skipping.`);
+                        return;
+                    }
+                }
 
                 const curVersion = DeviceInfo.getVersion();
                 const buildNumber = DeviceInfo.getBuildNumber();

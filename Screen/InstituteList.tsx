@@ -487,28 +487,6 @@ const InstituteListScreen: React.FC = () => {
     }
   };
 
-  // const requestPermissions = async () => {
-  //   try {
-
-  //     const permission =
-  //       (PERMISSIONS as any)?.ANDROID?.POST_NOTIFICATIONS ||
-  //       "android.permission.POST_NOTIFICATIONS";
-
-  //     const result = await request(permission);
-  //     if (result === "denied" || result === "blocked") {
-  //       Alert.alert(
-  //         "Permission Needed",
-  //         "Notification permission is required. Open settings?",
-  //         [
-  //           { text: "Cancel", style: "cancel" },
-  //           { text: "Open Settings", onPress: () => openSettings() },
-  //         ]
-  //       );
-  //     }
-  //   } catch (e) {
-  //     console.log("Permission request failed", e);
-  //   }
-  // };
 
 
   // ✅ Permissions
@@ -557,131 +535,88 @@ const InstituteListScreen: React.FC = () => {
   };
 
 
-  // let backHandlerAdded = false;
+let backHandlerListener: any = null;
+let updateAlertShown = false;
 
-  // const checkForUpdate = async () => {
-  //   try {
-  //     const currentVersion = VersionCheck.getCurrentVersion();
-  //     const latestVersion = await VersionCheck.getLatestVersion({
-  //       provider: 'playStore',
-  //     });
+const checkForUpdate = async () => {
+  try {
+    const currentVersion = VersionCheck.getCurrentVersion();
 
-  //     const updateInfo = await VersionCheck.needUpdate({
-  //       currentVersion,
-  //       latestVersion,
-  //     });
+    // 🔹 Backend check (SOURCE OF TRUTH)
+    const response = await axios.post(
+      `https://www.vtsmile.in/app/api/version_check_api?cuarr_version=${currentVersion}`
+    );
 
-  //     console.log('Current:', currentVersion);
-  //     console.log('Latest:', latestVersion);
-  //     console.log('Need Update:', updateInfo.isNeeded);
+    if (!response.data?.isSuccess) return;
 
-  //     if (updateInfo.isNeeded) {
+    const { isUpdateRequired } = response.data;
 
-  //       // 🔒 Block back button ONLY once
-  //       if (!backHandlerAdded) {
-  //         BackHandler.addEventListener('hardwareBackPress', () => true);
-  //         backHandlerAdded = true;
-  //       }
+    console.log('Backend force update:', isUpdateRequired);
 
-  //       Alert.alert(
-  //         'Update Required 🚨',
-  //         'A newer version of SMILE app is available. Please update to continue.',
-  //         [
-  //           {
-  //             text: 'UPDATE NOW',
-  //             onPress: () => {
-  //               Linking.openURL(updateInfo.storeUrl);
-  //               BackHandler.exitApp();
-  //             },
-  //           },
-  //         ],
-  //         { cancelable: false }
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.log('Version Check Error:', error);
-  //   }
-  // };
+    if (!isUpdateRequired) {
+      // Restore back button if update not required
+      if (backHandlerListener) {
+        backHandlerListener.remove();
+        backHandlerListener = null;
+      }
+      updateAlertShown = false;
+      return;
+    }
 
+    // Prevent multiple alerts
+    if (updateAlertShown) return;
+    updateAlertShown = true;
 
+    const playStoreUrl = await VersionCheck.getPlayStoreUrl();
 
+    // 🔒 Disable hardware back button
+    backHandlerListener = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => true
+    );
 
+    const showUpdateAlert = () => {
+      Alert.alert(
+        'Update Required',
+        'A new version of SMILE app is available. Please update to continue.',
+        [
+          {
+            text: 'UPDATE NOW',
+            onPress: async () => {
+              const supported = await Linking.canOpenURL(playStoreUrl);
+              if (supported) {
+                Linking.openURL(playStoreUrl);
+              }
+              // Re-show alert if user comes back
+              setTimeout(showUpdateAlert, 1500);
+            },
+          },
+        ],
+        { cancelable: false }
+      );
+    };
 
-  //   useEffect(() => {
-
-  //     const init = async () => {
-  //       setLoading(true);
-  //       await requestPermissions();
-  //       await loadInstitutes();
-  //       await checkForUpdate();
-  //       setLoading(false);
-  //     };
-  //     init();
-  //   }, []);
-
-
-  // let backHandlerAdded = useRef(false);
-
-  // const checkForUpdate = async () => {
-  //   try {
-  //     const currentVersion = VersionCheck.getCurrentVersion();
-  //     const latestVersion = await VersionCheck.getLatestVersion({
-  //       provider: 'playStore',
-  //     });
-
-  //     const updateInfo = await VersionCheck.needUpdate({
-  //       currentVersion,
-  //       latestVersion,
-  //     });
-
-  //     console.log('Current:', currentVersion);
-  //     console.log('Latest:', latestVersion);
-  //     console.log('Need Update:', updateInfo.isNeeded);
-
-  //     if (updateInfo.isNeeded) {
-  //       if (!backHandlerAdded.current) {
-  //         BackHandler.addEventListener('hardwareBackPress', () => true);
-  //         backHandlerAdded.current = true;
-  //       }
-
-  //       Alert.alert(
-  //         'Update Required 🚨',
-  //         'A newer version of SMILE app is available. Please update to continue.',
-  //         [
-  //           {
-  //             text: 'UPDATE NOW',
-  //             onPress: () => {
-  //               Linking.openURL(updateInfo.storeUrl);
-  //               // Removed: BackHandler.exitApp(); – Let the OS handle update and restart
-  //             },
-  //           },
-  //         ],
-  //         { cancelable: false }
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.log('Version Check Error:', error);
-  //     Alert.alert('Error', 'Unable to check for updates. Please ensure you have an internet connection and try again.');
-  //   }
-  // };
-
-
+    showUpdateAlert();
+  } catch (error) {
+    console.log('Force update error:', error);
+  }
+}
   useEffect(() => {
     const init = async () => {
       setLoading(true);
       await requestPermissions();
       await loadInstitutes();
-      // await checkForUpdate();
+      await checkForUpdate();
       setLoading(false);
     };
     init();
 
-    // return () => {
-    //   if (backHandlerAdded.current) {
-    //     BackHandler.removeEventListener('hardwareBackPress', () => true);
-    //     backHandlerAdded.current = false;
-    //   }
-    // };
+    return () => {
+      if (backHandlerListener) {
+      backHandlerListener.remove();
+      backHandlerListener = null;
+    }
+    };
   }, []);
 
   useFocusEffect(
@@ -716,7 +651,6 @@ const InstituteListScreen: React.FC = () => {
           })
         }
       >
-        {console.log('orgName==>', item.orgName)}
         <View style={styles.cardHeader}>
           {/* <Text style={styles.appName}>e-SCHOOL</Text> */}
           {/* <Image
@@ -742,7 +676,7 @@ const InstituteListScreen: React.FC = () => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 ,backgroundColor:'#6A11CB'}}>
+    <SafeAreaView style={{ flex: 1 ,backgroundColor:'#6A11CB',marginBottom:-30}}>
       <LinearGradient
         start={{ x: 0.0, y: 0.25 }}
         end={{ x: 0.5, y: 1.0 }}
@@ -987,7 +921,7 @@ const styles = StyleSheet.create({
   noDataText: { color: "#fff", fontSize: wp(4), fontFamily: fonts.ROBOTO_BOLD },
   footer: {
     position: "absolute",
-    bottom: hp(2),
+    bottom: hp(5),
     alignSelf: "center",
     color: "#fff",
     fontSize: wp(3.8),
