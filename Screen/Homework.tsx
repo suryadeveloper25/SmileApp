@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView, ActivityIndicator, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView, ActivityIndicator, Linking, StatusBar } from 'react-native';
 // import { Calendar } from 'react-native-calendars';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Calendar, CalendarList } from 'react-native-calendars';
@@ -258,139 +258,140 @@ const HomeworkScreen: React.FC<HomeworkScreenProps> = ({ route, navigation }) =>
   }
 
   return (
-    <SafeAreaView style={{flex:1, backgroundColor:'#7c43bd',marginBottom:-30}}>
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="white" />
-        </TouchableOpacity>
-        <View style={styles.headerTitle}>
-          <Text style={styles.title}>My Homework</Text>
-          {/* <Icon name="create-outline" size={28} color="yellow" style={styles.editIcon} /> */}
-        </View>
-        {/* <View style={styles.headerAvatar} /> */}
-      </View>
-
-      {/* Toggle Button Group */}
-      <View style={{ backgroundColor: '#8659e5', width: "95%", height: 70, marginTop: 20, marginLeft: 10, borderRadius: 15 }}>
-        <View style={styles.tabContainer}>
-          <TouchableOpacity
-            style={activeTab === 'Homework' ? styles.activeTab : styles.inactiveTab}
-            onPress={() => setActiveTab('Homework')}
-          >
-            <Text style={activeTab === 'Homework' ? styles.activeTabText : styles.inactiveTabText}>Homework</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#6A1B9A', marginBottom: -30 }} edges={['top']}>
+      <StatusBar barStyle="light-content" backgroundColor={'#6A1B9A'} />
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Icon name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={activeTab === 'Special Homework' ? styles.activeTab1 : styles.inactiveTab1}
-            onPress={() => setActiveTab('Special Homework')}
-          >
-            <Text style={activeTab === 'Special Homework' ? styles.activeTabText : styles.inactiveTabText}>Special Homework</Text>
-          </TouchableOpacity>
+          <View style={styles.headerTitle}>
+            <Text style={styles.title}>My Homework</Text>
+            {/* <Icon name="create-outline" size={28} color="yellow" style={styles.editIcon} /> */}
+          </View>
+          {/* <View style={styles.headerAvatar} /> */}
         </View>
-      </View>
-      {/* Date strip (Horizontal Calendar) */}
-      <View style={styles.calendarWrapper}>
 
-        <Calendar
-          // horizontal={true}
-          onDayPress={day => setSelectedDate(day.dateString)}
-          markedDates={{
-            [today]: {
-              selected: today === selectedDate, // if today is selected
-              marked: true,
-              selectedColor: today === selectedDate ? 'orange' : 'purple', // green for today, orange if selected
-              selectedTextColor: 'white',
-              customStyles: {
-                container: {
-                  backgroundColor: today === selectedDate ? 'orange' : 'purple',
-                },
-                text: {
-                  color: 'white',
-                  fontWeight: 'bold',
+        {/* Toggle Button Group */}
+        <View style={{ backgroundColor: '#8659e5', width: "95%", height: 70, marginTop: 20, marginLeft: 10, borderRadius: 15 }}>
+          <View style={styles.tabContainer}>
+            <TouchableOpacity
+              style={activeTab === 'Homework' ? styles.activeTab : styles.inactiveTab}
+              onPress={() => setActiveTab('Homework')}
+            >
+              <Text style={activeTab === 'Homework' ? styles.activeTabText : styles.inactiveTabText}>Homework</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={activeTab === 'Special Homework' ? styles.activeTab1 : styles.inactiveTab1}
+              onPress={() => setActiveTab('Special Homework')}
+            >
+              <Text style={activeTab === 'Special Homework' ? styles.activeTabText : styles.inactiveTabText}>Special Homework</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* Date strip (Horizontal Calendar) */}
+        <View style={styles.calendarWrapper}>
+
+          <Calendar
+            // horizontal={true}
+            onDayPress={day => setSelectedDate(day.dateString)}
+            markedDates={{
+              [today]: {
+                selected: today === selectedDate, // if today is selected
+                marked: true,
+                selectedColor: today === selectedDate ? 'orange' : 'purple', // green for today, orange if selected
+                selectedTextColor: 'white',
+                customStyles: {
+                  container: {
+                    backgroundColor: today === selectedDate ? 'orange' : 'purple',
+                  },
+                  text: {
+                    color: 'white',
+                    fontWeight: 'bold',
+                  },
                 },
               },
-            },
-            [selectedDate]: {
-              selected: true,
-              marked: true,
-              selectedColor: 'orange',
-              selectedTextColor: 'white',
-            },
-          }}
-          markingType={'custom'} // use custom to allow customStyles
-        />
+              [selectedDate]: {
+                selected: true,
+                marked: true,
+                selectedColor: 'orange',
+                selectedTextColor: 'white',
+              },
+            }}
+            markingType={'custom'} // use custom to allow customStyles
+          />
 
+
+
+        </View>
+
+
+        <ScrollView style={styles.homeworkContent}>
+          {activeTab === 'Homework' ? (
+            homeworkList.length === 0 ? (
+              <View style={styles.emptyHomework}>
+                <Image source={require('../assest/smile-No-Data-Found-BG.png')} style={styles.emptyImage} />
+                <Text style={styles.emptyText}>No Homework Data Found!</Text>
+              </View>
+            ) : (
+              homeworkList.map((item, index) => (
+                <View key={index} style={styles.homeworkItem}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                    <Text style={styles.homeworkSubject}>{item.subjectName}</Text>
+                    {isValidFileUrl(item.hwAttach) && (
+                      <TouchableOpacity
+                        onPress={() => Linking.openURL(item.hwAttach)}
+                      >
+                        <Image
+                          source={require('../assest/pdf_11180499.png')}
+                          style={styles.pdfIcon}
+                        />
+                      </TouchableOpacity>
+                    )}
+                  </View>
+
+                  <Text style={styles.homeworkTask}>{item.homeworkDesc}</Text>
+                  {/* <Text style={styles.homeworkTask}>{item.homeworkDesc}</Text> */}
+
+                </View>
+              ))
+            )
+          ) : (
+            specialHomeworkList.length === 0 ? (
+              <View style={styles.emptyHomework}>
+                <Image source={require('../assest/smile-No-Data-Found-BG.png')} style={styles.emptyImage} />
+                <Text style={styles.emptyText}>No Special Homework Data Found!</Text>
+              </View>
+            ) : (
+              specialHomeworkList.map((item, index) => (
+                <View key={index} style={styles.homeworkItem}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={styles.homeworkSubject}>{item.subjectName}</Text>
+                    {isValidFileUrl(item.spl_hw_attach) && (
+                      <TouchableOpacity
+                        onPress={() => Linking.openURL(item.spl_hw_attach)}
+                      >
+                        <Image
+                          source={require('../assest/pdf_11180499.png')}
+                          style={styles.pdfIcon}
+                        />
+                      </TouchableOpacity>
+                    )}
+                  </View>
+
+                  <Text style={styles.homeworkTask}>{item.specialhwDesc}</Text>
+                  {/* <Text style={styles.homeworkTask}>{item.spl_hw_attach}</Text> */}
+
+                </View>
+              ))
+            )
+          )}
+        </ScrollView>
 
 
       </View>
-
-
-      <ScrollView style={styles.homeworkContent}>
-        {activeTab === 'Homework' ? (
-          homeworkList.length === 0 ? (
-            <View style={styles.emptyHomework}>
-              <Image source={require('../assest/smile-No-Data-Found-BG.png')} style={styles.emptyImage} />
-              <Text style={styles.emptyText}>No Homework Data Found!</Text>
-            </View>
-          ) : (
-            homeworkList.map((item, index) => (
-              <View key={index} style={styles.homeworkItem}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-
-                  <Text style={styles.homeworkSubject}>{item.subjectName}</Text>
-                  {isValidFileUrl(item.hwAttach) && (
-                    <TouchableOpacity
-                      onPress={() => Linking.openURL(item.hwAttach)}
-                    >
-                      <Image
-                        source={require('../assest/pdf_11180499.png')}
-                        style={styles.pdfIcon}
-                      />
-                    </TouchableOpacity>
-                  )}
-                </View>
-
-                <Text style={styles.homeworkTask}>{item.homeworkDesc}</Text>
-                {/* <Text style={styles.homeworkTask}>{item.homeworkDesc}</Text> */}
-
-              </View>
-            ))
-          )
-        ) : (
-          specialHomeworkList.length === 0 ? (
-            <View style={styles.emptyHomework}>
-              <Image source={require('../assest/smile-No-Data-Found-BG.png')} style={styles.emptyImage} />
-              <Text style={styles.emptyText}>No Special Homework Data Found!</Text>
-            </View>
-          ) : (
-            specialHomeworkList.map((item, index) => (
-              <View key={index} style={styles.homeworkItem}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={styles.homeworkSubject}>{item.subjectName}</Text>
-                  {isValidFileUrl(item.spl_hw_attach) && (
-                    <TouchableOpacity
-                      onPress={() => Linking.openURL(item.spl_hw_attach)}
-                    >
-                      <Image
-                        source={require('../assest/pdf_11180499.png')}
-                        style={styles.pdfIcon}
-                      />
-                    </TouchableOpacity>
-                  )}
-                </View>
-
-                <Text style={styles.homeworkTask}>{item.specialhwDesc}</Text>
-                {/* <Text style={styles.homeworkTask}>{item.spl_hw_attach}</Text> */}
-
-              </View>
-            ))
-          )
-        )}
-      </ScrollView>
-
-
-    </View>
     </SafeAreaView>
   );
 };
@@ -425,7 +426,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    backgroundColor: '#7c43bd',
+    backgroundColor: '#6A1B9A',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,

@@ -27,6 +27,8 @@ export type ApplicationStackParamList = {
     Video: undefined;
     ResetPasswordScreen: undefined;
     Newleave: undefined;
+    StopListScreen: undefined;
+    VideoViewScreen: undefined;
 
 };
 
@@ -50,9 +52,9 @@ export type AuthStackScreenPrpos = StackScreenProps<AuthStackParamList>;
 
 export type BottomTabParamList = {
     Home: { orgid: string; studentId: string; mobile: string };
-    Attendance: { orgid: string; studentId: string; mobile: string };;
-    Profile: { orgid: string; studentId: string; mobile: string };;
-    Notification: { orgid: string; studentId: string; mobile: string };;
+    Attendance: { orgid: string; studentId: string; mobile: string };
+    Profile: { orgid: string; studentId: string; mobile: string };
+    Notification: { orgid: string; studentId: string; mobile: string };
 };
 
 export type BottomTabScreenProps = RNBottomTabScreenProps<BottomTabParamList>;
@@ -85,7 +87,7 @@ export type DrawerNaviagtorParamList = {
     Video: undefined;
     ResetPasswordScreen: undefined;
     Newleave: undefined;
-
+    StopListScreen: undefined;
 }
 
 export type DrawerNaviagtorScreenProps = DrawerNavigationProp<DrawerNaviagtorParamList>;

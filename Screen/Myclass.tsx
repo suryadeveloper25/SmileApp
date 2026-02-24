@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Image,
+  Dimensions,
   // Image,
   // FlatList,
   // Dimensions,
@@ -26,6 +27,10 @@ import Collapsible from "react-native-collapsible";
 import { fonts } from "../root/config";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const { width, height } = Dimensions.get('window');
+const BASE = 375;
+const scale = (n: number) => Math.round((width / BASE) * n);
+const sp = (n: number) => Math.min(Math.max(scale(n), n * 0.78), n * 1.22);
 
 interface MyclassScreenProps {
   route: any;
@@ -95,8 +100,27 @@ const MyclassScreen: React.FC<MyclassScreenProps> = ({ route, navigation }) => {
     );
   }
 
+  const ProfileCard = () => (
+    <View style={styles.profileCard}>
+
+      <Text style={styles.studentName}>{student.stud_name || '—'}</Text>
+      <View style={styles.badgesRow}>
+        <View style={styles.badge}>
+          <Icon name="group" size={sp(12)} color="rgba(255,255,255,0.8)" />
+          <Text style={styles.badgeText}>Class: {student.std_name} {student.section}</Text>
+        </View>
+        <View style={styles.badgeDot} />
+        <View style={styles.badge}>
+          <Icon name="format-list-numbered" size={sp(12)} color="rgba(255,255,255,0.8)" />
+          <Text style={styles.badgeText}>Roll: {student.rollNo}</Text>
+        </View>
+      </View>
+    </View>
+  );
+
+
   return (
-    <SafeAreaView style={{ flex: 1,backgroundColor:'#7c43bd',marginBottom:-30}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#6A1B9A', marginBottom: -30 }}>
 
       <View style={styles.container}>
         <View style={styles.headerBox}>
@@ -106,6 +130,9 @@ const MyclassScreen: React.FC<MyclassScreenProps> = ({ route, navigation }) => {
           <Text style={styles.progressText}>My Class</Text>
 
         </View>
+        <View style={{ padding: sp(14) }}>
+          <ProfileCard />
+        </View>
         {/* <View style={styles.header}>
           
              <TouchableOpacity onPress={()=> navigation.navigate('Home')}  style={styles.backBtn}>
@@ -113,11 +140,11 @@ const MyclassScreen: React.FC<MyclassScreenProps> = ({ route, navigation }) => {
                     </TouchableOpacity>
           <Text style={styles.headerText}>My Class</Text>
         </View> */}
-        <View style={styles.profileBox}>
+        {/* <View style={styles.profileBox}>
 
           <Text style={styles.profileName}>  {student.stud_name?.toUpperCase() || "Student Name"}</Text>
           <Text style={styles.classInfo}>    Class: {student.std_name || "-"} {student.section || ""}   Roll No: {student.rollNo || "-"}</Text>
-        </View>
+        </View> */}
 
         <View style={styles.listContainer}>
           <TouchableOpacity
@@ -138,7 +165,8 @@ const MyclassScreen: React.FC<MyclassScreenProps> = ({ route, navigation }) => {
             <Divider style={{ backgroundColor: '#b6b5b5ff', height: 1, marginHorizontal: -1, marginTop: 5 }} />
             {classList.length > 0 ? (
               <View style={{ padding: 10, bottom: 10, height: 500 }}>
-                <ScrollView>
+                <ScrollView contentContainerStyle={{ paddingBottom: 100 }}
+                  showsVerticalScrollIndicator={false}>
 
                   <FlatList
                     data={classList}
@@ -183,7 +211,7 @@ export default MyclassScreen;
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff', width: "100%", },
   header: {
-    backgroundColor: '#7c43bd',
+    backgroundColor: '#6A1B9A',
     paddingHorizontal: 20,
 
   },
@@ -202,14 +230,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 1, marginTop: 20
   },
   profileBox: {
-    backgroundColor: '#7c43bd',
+    backgroundColor: '#6A1B9A',
     padding: 15, width: '95%', marginLeft: 10,
     borderRadius: 10, marginTop: 20,
     alignItems: 'center',
   },
   headerBox: {
     flexDirection: 'row', alignItems: 'center',
-    backgroundColor: '#7c43bd', padding: 16, justifyContent: 'space-between',
+    backgroundColor: '#6A1B9A', padding: 16, justifyContent: 'space-between',
   },
   progressText: {
     color: '#fff', fontSize: 20, fontFamily: fonts.FONT_BOLD, right: wp('33%')
@@ -256,7 +284,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     maxHeight: '75%',
-    marginTop: 20,
+    marginTop: 5,
     width: '95%', paddingVertical: 5,
     marginHorizontal: 8,
     borderWidth: 1,
@@ -300,6 +328,70 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     right: 5
+  },
+  profileCard: {
+    backgroundColor: "#6A1B9A",
+    borderRadius: sp(20),
+    paddingVertical: sp(20),
+    paddingHorizontal: sp(16),
+    alignItems: 'center',
+    marginBottom: sp(14),
+    shadowColor: '#000',
+    shadowOpacity: 0.18,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 5,
+  },
+  avatar: {
+    width: sp(56),
+    height: sp(56),
+    borderRadius: sp(28),
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.45)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: sp(9),
+  },
+  avatarLetter: {
+    fontSize: sp(26),
+    color: '#fff',
+    fontFamily: fonts.FONT_BOLD,
+  },
+  studentName: {
+    color: '#fff',
+    fontSize: sp(17),
+    fontFamily: fonts.FONT_BOLD,
+    letterSpacing: 0.4,
+    textAlign: 'center',
+    marginBottom: sp(7),
+  },
+  badgesRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    gap: sp(6),
+  },
+  badge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: sp(20),
+    paddingHorizontal: sp(10),
+    paddingVertical: sp(4),
+    gap: sp(4),
+  },
+  badgeText: {
+    color: '#ffffff',
+    fontSize: sp(12),
+    fontFamily: fonts.FONT_MEDIUM,
+  },
+  badgeDot: {
+    width: sp(4),
+    height: sp(4),
+    borderRadius: sp(2),
+    backgroundColor: 'rgba(255,255,255,0.35)',
   },
   row: {
     flexDirection: 'row',

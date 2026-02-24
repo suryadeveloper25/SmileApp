@@ -27,7 +27,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fonts } from '../root/config';
 import { showMessage } from 'react-native-flash-message';
-  import messaging from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 const { width, height } = Dimensions.get('window');
 
 interface SettingScreenProps {
@@ -67,8 +67,8 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ route, navigation }) => {
 
   const Logout = async () => {
     try {
-    await messaging().deleteToken();
- 
+      await messaging().deleteToken();
+
       await AsyncStorage.removeItem("isloggedIn");
       await AsyncStorage.removeItem("mobile");
       dispatch(logoutAction());
@@ -113,94 +113,94 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ route, navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={() => { setShowDropdown(false); Keyboard.dismiss(); }}>
       <SafeAreaView style={styles.safeArea}>
-        <View style={{flex:1,backgroundColor:'#fff'}}>
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
 
-       
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.navigate('HomeTab', { orgid, studentId, mobile })}>
-            <MaterialIcons name="arrow-back" size={RFValue(26)} color="#fff" />
-          </TouchableOpacity>
 
-          <Text style={styles.headerText}>Setting</Text>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.navigate('HomeTab', { orgid, studentId, mobile })}>
+              <MaterialIcons name="arrow-back" size={RFValue(26)} color="#fff" />
+            </TouchableOpacity>
 
-          <View style={styles.profileWrapper}>
-            <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
-              {/* <Image
+            <Text style={styles.headerText}>Setting</Text>
+
+            <View style={styles.profileWrapper}>
+              <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
+                {/* <Image
                 source={require('../assest/icons8-administrator-male-50.png')}
                 style={styles.profileImage}
               /> */}
-              <Image
-                source={
-                  student.photo_url
-                    ? { uri: student.photo_url }
-                    : require('../assest/icons8-administrator-male-50.png')
-                }
-                style={styles.profileImage}
-              />
-            </TouchableOpacity>
+                <Image
+                  source={
+                    student.photo_url
+                      ? { uri: student.photo_url }
+                      : require('../assest/icons8-administrator-male-50.png')
+                  }
+                  style={styles.profileImage}
+                />
+              </TouchableOpacity>
 
-            {showDropdown && (
-              <View style={styles.dropdown}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('Setting')}
-                  style={styles.dropdownItem}>
-                  <MaterialIcons name="settings" size={20} color="red" />
-                  <Text style={styles.dropdownText}>Settings</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={handleLogoutPress}
-                  style={styles.dropdownItem}>
-                  <MaterialIcons name="logout" size={20} color="red" />
-                  <Text style={styles.dropdownText}>Logout</Text>
+              {showDropdown && (
+                <View style={styles.dropdown}>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Setting')}
+                    style={styles.dropdownItem}>
+                    <MaterialIcons name="settings" size={20} color="red" />
+                    <Text style={styles.dropdownText}>Settings</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleLogoutPress}
+                    style={styles.dropdownItem}>
+                    <MaterialIcons name="logout" size={20} color="red" />
+                    <Text style={styles.dropdownText}>Logout</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          </View>
+
+          {/* Top Section */}
+          <View style={styles.topSection}>
+            <Image
+              source={require('../assest/icons8-security-configuration-64.png')}
+              style={styles.topIcon}
+            />
+            <Text style={styles.topText}>App Setting</Text>
+          </View>
+
+          {/* Main Card */}
+          <Card style={styles.card}>
+            <Card.Content>
+              <View style={styles.infoRow}>
+                <MaterialIcons name="password" size={25} style={styles.icon} />
+                <Text style={styles.infoLabel}>Reset Password</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('ResetPasswordScreen', { orgid, studentId, mobile })
+                }>
+
+                  <MaterialIcons name="arrow-circle-right" size={30} style={styles.iconRight} />
                 </TouchableOpacity>
               </View>
-            )}
+              <Text style={styles.infoValue}>To reset your app password</Text>
+
+              <View style={styles.infoRow}>
+                <MaterialIcons name="format-list-bulleted-add" size={25} style={styles.icon} />
+                <Text style={styles.infoLabel}>About SMILE Faculty</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('AboutScreen', { orgid, studentId, mobile })}>
+                  <MaterialIcons name="arrow-circle-right" size={30} style={styles.iconRight} />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.infoValue}>About app terms and details</Text>
+            </Card.Content>
+          </Card>
+
+          <View style={styles.imageWrapper}>
+            <Image
+              source={require('../assest/smile-settings-main-bg.png')}
+              style={styles.setImg}
+            />
           </View>
-        </View>
 
-        {/* Top Section */}
-        <View style={styles.topSection}>
-          <Image
-            source={require('../assest/icons8-security-configuration-64.png')}
-            style={styles.topIcon}
-          />
-          <Text style={styles.topText}>App Setting</Text>
-        </View>
-
-        {/* Main Card */}
-        <Card style={styles.card}>
-          <Card.Content>
-            <View style={styles.infoRow}>
-              <MaterialIcons name="password" size={25} style={styles.icon} />
-              <Text style={styles.infoLabel}>Reset Password</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('ResetPasswordScreen', { orgid, studentId, mobile })
-              }>
-
-                <MaterialIcons name="arrow-circle-right" size={30} style={styles.iconRight} />
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.infoValue}>To reset your app password</Text>
-
-            <View style={styles.infoRow}>
-              <MaterialIcons name="format-list-bulleted-add" size={25} style={styles.icon} />
-              <Text style={styles.infoLabel}>About SMILE Faculty</Text>
-              <TouchableOpacity onPress={() => navigation.navigate('AboutScreen', { orgid, studentId, mobile })}>
-                <MaterialIcons name="arrow-circle-right" size={30} style={styles.iconRight} />
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.infoValue}>About app terms and details</Text>
-          </Card.Content>
-        </Card>
-
-        <View style={styles.imageWrapper}>
-          <Image
-            source={require('../assest/smile-settings-main-bg.png')}
-            style={styles.setImg}
-          />
-        </View>
-
-        {/* Logout Modal */}
-        <Modal
+          {/* Logout Modal */}
+          {/* <Modal
           visible={customAlertVisible}
           transparent
           animationType="fade"
@@ -232,15 +232,59 @@ const SettingScreen: React.FC<SettingScreenProps> = ({ route, navigation }) => {
               </View>
             </View>
           </View>
-        </Modal>
-         </View>
+        </Modal> */}
+          <Modal
+            visible={customAlertVisible}
+            transparent
+            animationType="fade"
+            onRequestClose={() => setCustomAlertVisible(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                {/* Icon */}
+                <View style={styles.iconContainer}>
+                  <MaterialIcons name="crisis-alert" size={24} color="#e53935" style={{ top: 3, marginLeft: 10 }} />
+                  <Text style={styles.modalTitle}>Confirm Logout</Text>
+                </View>
+
+                {/* Divider */}
+                <View style={styles.modalDivider} />
+
+                {/* Message */}
+                <Text style={styles.modalMessage}>
+                  Are you sure you want to logout?
+                </Text>
+
+                {/* Buttons */}
+                <View style={styles.modalButtonContainer}>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.cancelButton]}
+                    onPress={() => setCustomAlertVisible(false)}
+                  >
+                    <Text style={styles.buttonText}>No</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.confirmButton]}
+                    onPress={() => {
+                      setCustomAlertVisible(false);
+                      Logout();
+                    }}>
+
+                    <Text style={styles.buttonText}>Yes</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+        </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#730673ff',marginBottom:-30 },
+  safeArea: { flex: 1, backgroundColor: '#730673ff', marginBottom: -30 },
 
   header: {
     flexDirection: 'row',
@@ -265,6 +309,75 @@ const styles = StyleSheet.create({
   },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   profileImage: { width: wp('9%'), height: wp('9%'), borderRadius: 15 },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: wp(85),
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  iconContainer: {
+    flexDirection: 'row'
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#c34646ff',
+    fontFamily: fonts.FONT_BOLD,
+    marginBottom: 12,
+  },
+  modalDivider: {
+    height: 1,
+    backgroundColor: '#5b5959ff',
+    width: '115%',
+    marginBottom: 16,
+  },
+  modalMessage: {
+    fontSize: 16,
+    fontFamily: fonts.FONT_MEDIUM,
+    color: '#5e5d5dff',
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 22,
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    gap: 12,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#bcc6fbff',
+  },
+  confirmButton: {
+    backgroundColor: '#e53935',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+    fontFamily: fonts.FONT_BOLD,
+  },
 
   dropdown: {
     // position: 'absolute',
@@ -357,12 +470,12 @@ const styles = StyleSheet.create({
     height: width * 0.7,
     resizeMode: 'contain',
   },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  // modalOverlay: {
+  //   flex: 1,
+  //   backgroundColor: 'rgba(0,0,0,0.6)',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
   modalContent: {
     width: '80%',
     backgroundColor: '#fbfbfbff',
@@ -370,43 +483,43 @@ const styles = StyleSheet.create({
     padding: RFValue(16),
     alignItems: 'center',
   },
-  modalTitle: {
-    fontSize: RFValue(17),
-    fontFamily: fonts.FONT_BOLD,
-    color: '#c34646ff',
-    top: hp(0.6),
-    marginLeft: wp(1)
-  },
+  // modalTitle: {
+  //   fontSize: RFValue(17),
+  //   fontFamily: fonts.FONT_BOLD,
+  //   color: '#c34646ff',
+  //   top: hp(0.6),
+  //   marginLeft: wp(1)
+  // },
   modalIcon: { color: '#981313ff', marginTop: RFValue(8) },
-  modalMessage: {
-    fontSize: RFValue(14),
-    color: '#5e5d5dff',
-    marginVertical: RFValue(16),
-    textAlign: 'center',
-    fontFamily: fonts.ROBOTO_BOLD,
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '90%',
-  },
-  cancelButton: {
-    backgroundColor: '#bcc6fbff',
-    paddingVertical: RFValue(10),
-    paddingHorizontal: RFValue(25),
-    borderRadius: 12,
-  },
-  confirmButton: {
-    backgroundColor: '#e53935',
-    paddingVertical: RFValue(10),
-    paddingHorizontal: RFValue(25),
-    borderRadius: 12,
-  },
-  buttonText: {
-    color: '#fff',
-    fontFamily: fonts.FONT_BOLD,
-    fontSize: RFValue(13),
-  },
+  // modalMessage: {
+  //   fontSize: RFValue(14),
+  //   color: '#5e5d5dff',
+  //   marginVertical: RFValue(16),
+  //   textAlign: 'center',
+  //   fontFamily: fonts.ROBOTO_BOLD,
+  // },
+  // modalButtonContainer: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-around',
+  //   width: '90%',
+  // },
+  // cancelButton: {
+  //   backgroundColor: '#bcc6fbff',
+  //   paddingVertical: RFValue(10),
+  //   paddingHorizontal: RFValue(25),
+  //   borderRadius: 12,
+  // },
+  // confirmButton: {
+  //   backgroundColor: '#e53935',
+  //   paddingVertical: RFValue(10),
+  //   paddingHorizontal: RFValue(25),
+  //   borderRadius: 12,
+  // },
+  // buttonText: {
+  //   color: '#fff',
+  //   fontFamily: fonts.FONT_BOLD,
+  //   fontSize: RFValue(13),
+  // },
   divider: {
     width: '100%',
     backgroundColor: '#999',

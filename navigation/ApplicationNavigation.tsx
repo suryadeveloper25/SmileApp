@@ -73,6 +73,7 @@ export const ApplicationNavigator: React.FC = () => {
       <Stack.Screen name="Gallery" component={GalleryScreen} options={{ headerShown: false }} />
       <Stack.Screen name="AboutScreen" component={AboutScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Video" component={VideoScreen} options={{ headerShown: false }} />
+       <Stack.Screen name="VideoViewScreen" component={VideoViewScreen} options={{ headerShown: false }} />
       <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Newleave" component={NewLeaveScreen} options={{ headerShown: false }} />
       <Stack.Screen name="StopListScreen" component={StopListScreen} options={{ headerShown: false }} />
@@ -87,7 +88,7 @@ export const AuthNavigator: React.FC<any> = () => {
   return (
     <AuthStack.Navigator initialRouteName='SplashScreen' screenOptions={{ headerShown: false }}>
       <AuthStack.Screen name='SplashScreen' component={SplashScreen} />
-      <AuthStack.Screen name='SmileWelcomeScreen' component={SmileWelcomeScreen} />
+      <AuthStack.Screen name='SmileWelcomeScreen' component={SmileWelcomeScreen}   options={{ headerShown: false}} />
       <AuthStack.Screen name='Login' component={LoginScreen} />
       <AuthStack.Screen name='ForgotPassword' component={ForgotPasswordScreen} />
       <AuthStack.Screen name="InstituteList" component={InstituteListScreen} options={{ headerShown: false }} />

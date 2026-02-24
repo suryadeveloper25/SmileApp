@@ -28,7 +28,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fonts } from '../root/config';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { showMessage } from 'react-native-flash-message';
- import messaging from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 import { SafeAreaView } from 'react-native-safe-area-context';
 const { width, height } = Dimensions.get('window');
 
@@ -76,7 +76,7 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route, naviga
 
       const url = `https://www.vtsmile.in/app/api/students/students_profile_data_api?orgId=${orgid}&studeId=${studentId}&mobile_no=${savedMobile || mobile}`;
       const response = await axios.post(url);
-    
+
       if (response.data.isSuccess && response.data.studDetails?.length > 0) {
         setStudent(response.data.studDetails[0]);
       }
@@ -90,7 +90,7 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route, naviga
   const dispatch = useDispatch();
   const Logout = async () => {
     try {
-          await messaging().deleteToken();
+      await messaging().deleteToken();
 
       await AsyncStorage.removeItem("isloggedIn");
       await AsyncStorage.removeItem("mobile");
@@ -179,7 +179,7 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route, naviga
 
       if (response.status === 200 && response.data) {
         const body = response.data;
-      
+
         if (body.isSuccess === true) {
           // show success and logout
           Alert.alert('Success', body.message || 'Password updated', [
@@ -427,7 +427,7 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route, naviga
         </View>
 
         {/* CUSTOM ALERT MODAL */}
-        <Modal
+        {/* <Modal
           visible={customAlertVisible}
           transparent
           animationType="fade"
@@ -465,6 +465,50 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route, naviga
               </View>
             </View>
           </View>
+        </Modal> */}
+        <Modal
+          visible={customAlertVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setCustomAlertVisible(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              {/* Icon */}
+              <View style={styles.iconContainer}>
+                <MaterialIcons name="crisis-alert" size={24} color="#e53935" style={{ top: 3, marginLeft: 10 }} />
+                <Text style={styles.modalTitle}>Confirm Logout</Text>
+              </View>
+
+              {/* Divider */}
+              <View style={styles.modalDivider} />
+
+              {/* Message */}
+              <Text style={styles.modalMessage}>
+                Are you sure you want to logout?
+              </Text>
+
+              {/* Buttons */}
+              <View style={styles.modalButtonContainer}>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.cancelButton]}
+                  onPress={() => setCustomAlertVisible(false)}
+                >
+                  <Text style={styles.buttonText}>No</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.confirmButton]}
+                  onPress={() => {
+                    setCustomAlertVisible(false);
+                    Logout();
+                  }}
+                >
+                  <Text style={styles.buttonText}>Yes</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
         </Modal>
       </SafeAreaView>
     </TouchableWithoutFeedback>
@@ -474,7 +518,7 @@ const ResetPasswordScreen: React.FC<ResetPasswordScreenProps> = ({ route, naviga
 export default ResetPasswordScreen;
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#730673ff',marginBottom:-30  },
+  safeArea: { flex: 1, backgroundColor: '#730673ff', marginBottom: -30 },
   container: { flex: 1, backgroundColor: '#fff' },
 
   header: {
@@ -501,12 +545,80 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
   },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: wp(85),
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  iconContainer: {
+    flexDirection: 'row'
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#c34646ff',
+    fontFamily: fonts.FONT_BOLD,
+    marginBottom: 12,
+  },
+  modalDivider: {
+    height: 1,
+    backgroundColor: '#5b5959ff',
+    width: '115%',
+    marginBottom: 16,
+  },
+  modalMessage: {
+    fontSize: 16,
+    fontFamily: fonts.FONT_MEDIUM,
+    color: '#5e5d5dff',
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 22,
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    gap: 12,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#bcc6fbff',
+  },
+  confirmButton: {
+    backgroundColor: '#e53935',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+    fontFamily: fonts.FONT_BOLD,
+  },
   backIcon: { color: '#fff', marginLeft: wp('4%') },
   headerText: {
     fontSize: wp('5.5%'),
     fontFamily: fonts.FONT_BOLD,
     color: '#fff',
-    marginLeft: wp('20%'),
+    marginLeft: wp('18%'),
   },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   profileWrapper: {
@@ -618,12 +730,12 @@ const styles = StyleSheet.create({
   },
 
   // Modal
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  // modalOverlay: {
+  //   flex: 1,
+  //   backgroundColor: 'rgba(0,0,0,0.6)',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
   modalContent: {
     width: '80%',
     backgroundColor: '#fbfbfbff',
@@ -638,24 +750,24 @@ const styles = StyleSheet.create({
     fontSize: 13,
     paddingHorizontal: 6,
   },
-  modalTitle: {
-    fontSize: wp('5%'),
-    fontFamily: fonts.FONT_BOLD,
-    color: '#c34646ff',
-    top: hp(0.6),
-    marginLeft: wp(1)
-  },
-  modalMessage: {
-    fontSize: wp('4%'),
-    color: '#5e5d5dff',
-    textAlign: 'center',
-    marginBottom: 10,
-    fontFamily: fonts.ROBOTO_BOLD,
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+  // modalTitle: {
+  //   fontSize: wp('5%'),
+  //   fontFamily: fonts.FONT_BOLD,
+  //   color: '#c34646ff',
+  //   top: hp(0.6),
+  //   marginLeft: wp(1)
+  // },
+  // modalMessage: {
+  //   fontSize: wp('4%'),
+  //   color: '#5e5d5dff',
+  //   textAlign: 'center',
+  //   marginBottom: 10,
+  //   fontFamily: fonts.ROBOTO_BOLD,
+  // },
+  // modalButtonContainer: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  // },
   noButton: {
     backgroundColor: '#bcc6fbff',
     paddingVertical: hp('1%'),

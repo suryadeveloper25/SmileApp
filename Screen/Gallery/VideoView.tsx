@@ -1,28 +1,159 @@
 
 
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Dimensions,
-  FlatList,
-  ActivityIndicator,
-} from 'react-native';
-import { Divider } from 'react-native-paper';
-import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import MaterialIcons from '@react-native-vector-icons/material-icons';
-import Video from "react-native-video";
-import { fonts } from "../../root/config";
-import { SafeAreaView } from "react-native-safe-area-context";
+// import React, { useEffect, useState } from "react";
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   TouchableOpacity,
+//   ScrollView,
+//   Image,
+//   Dimensions,
+//   FlatList,
+//   ActivityIndicator,
+// } from 'react-native';
+// import { Divider } from 'react-native-paper';
+// import axios from "axios";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+// import Icon from "react-native-vector-icons/MaterialIcons";
+// import MaterialIcons from '@react-native-vector-icons/material-icons';
+// import Video from "react-native-video";
+// import { fonts } from "../../root/config";
+// import { SafeAreaView } from "react-native-safe-area-context";
 
-const { width, height } = Dimensions.get("window");
+// const { width, height } = Dimensions.get("window");
 
+// // interface VideoViewScreenProps {
+// //   route: any
+// //   navigation: any
+// // }
+// // const VideoViewScreen: React.FC<VideoViewScreenProps> = ({ route, navigation }) => {
+// //   const { orgid, studentId, mobile, acaid, catid, } = route.params;
+// //   const [studentData, setStudentData] = useState({});
+// //   const [loading, setLoading] = useState(true);
+// //   const [vidList, setVidList] = useState([]);
+// //   const [isFolder, setIsFolder] = useState("");
+
+// //   // Fetch student data
+// //   const getStudentData = async () => {
+// //     try {
+// //       const loggedIn = await AsyncStorage.getItem("isloggedIn");
+// //       const mobileNo = await AsyncStorage.getItem("mobile");
+
+// //       const response = await axios.post(
+// //         `https://www.vtsmile.in/app/api/students/students_profile_data_api?orgId=${orgid}&studeId=${studentId}&mobile_no=${mobileNo}`
+// //       );
+
+// //       if (response.data.isSuccess && response.data.studDetails) {
+// //         setStudentData(response.data.studDetails[0]);
+// //       }
+// //     } catch (err) {
+// //       console.log(err);
+// //     }
+// //   };
+
+// //   // Fetch videos list
+// //   const getVideosList = async () => {
+// //     try {
+// //       const response = await axios.post(
+// //         `https://www.vtsmile.in/app/api/students/video_gallery_api?orgId=${orgid}&aca_id=${acaid}&category_id=${catid}`
+// //       );
+// // console.log("response.data.galleryVideo==>",response.data.galleryVideo)
+// //       if (response.data.isSuccess && response.data.galleryVideo) {
+// //         setVidList(response.data.galleryVideo);
+// //       } else {
+// //         setIsFolder("No Data");
+// //       }
+// //     } catch (err) {
+// //       console.log(err);
+// //       setIsFolder("No Data");
+// //     }
+// //   };
+
+// //   useEffect(() => {
+// //     const fetchData = async () => {
+// //       await getStudentData();
+// //       await getVideosList();
+// //       setLoading(false);
+// //     };
+// //     fetchData();
+// //   }, []);
+
+
+
+// //   const renderVideoItem = ({ item }) => (
+// //     <View style={styles.videoContainer}>
+// //       <Video
+// //         source={{ uri: item.img_file_name }}
+// //         style={styles.video}
+// //         controls
+// //         resizeMode="cover"
+// //       />
+// //     </View>
+// //   );
+// //   if (loading) {
+// //     return (
+// //       <View style={styles.loader}>
+// //         <ActivityIndicator size="large" color="#7200b1" />
+// //       </View>
+// //     );
+// //   }
+
+
+// //   return (
+// //     <SafeAreaView style={{ flex: 1,backgroundColor:'#9C27B0' }}>
+// //       {/* Header */}
+// //       <View style={styles.container}>
+// //         <View style={styles.header}>
+// //           <TouchableOpacity onPress={() => navigation.goBack()}>
+// //             <Icon name="arrow-back" size={24} color="#fff" />
+// //           </TouchableOpacity>
+// //           <Text style={styles.headerText}>Gallery - Videos</Text>
+// //         </View>
+
+// //         {/* Content */}
+
+
+
+// //         <View style={styles.albumContainer}>
+// //           <Icon name="image" size={24} color="#2a2a2aff" />
+// //           <Text style={styles.albumTitle}>Video - {item.img_title}({item.lemgth})</Text>
+// //           <Divider style={{ backgroundColor: '#f26767ff', height: 1, marginHorizontal: -13, bottom: 10 }} />
+// //           <ScrollView contentContainerStyle={styles.content}>
+// //             <View style={styles.folderGrid}>
+
+// //               <FlatList
+// //                 data={vidList}
+// //                 renderItem={renderVideoItem}
+// //                 keyExtractor={(item, index) => index.toString()}
+// //                 numColumns={2}
+// //                 columnWrapperStyle={{ justifyContent: "space-between" }}
+// //                 contentContainerStyle={{ paddingBottom: 10 }}
+// //               />
+
+// //             </View>
+// //           </ScrollView>
+// //           <View>
+
+// //             <TouchableOpacity
+// //               onPress={() => {
+// //                 setLoading(true);
+// //                 getVideosList().then(() => setLoading(false));
+// //               }}
+// //             >
+// //               <Text style={{ color: "blue", marginTop: 5, fontFamily: fonts.FONT_BOLD, }}>Reload</Text>
+// //             </TouchableOpacity>
+// //           </View>
+// //         </View>
+// //         <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('Gallery', { orgid, studentId, mobile })}>
+// //           <MaterialIcons name="image" size={28} color="#fff" />
+// //         </TouchableOpacity>
+// //       </View>
+// //     </SafeAreaView>
+// //   );
+// // };
+
+// // export default VideoViewScreen;
 // interface VideoViewScreenProps {
 //   route: any
 //   navigation: any
@@ -58,7 +189,7 @@ const { width, height } = Dimensions.get("window");
 //       const response = await axios.post(
 //         `https://www.vtsmile.in/app/api/students/video_gallery_api?orgId=${orgid}&aca_id=${acaid}&category_id=${catid}`
 //       );
-// console.log("response.data.galleryVideo==>",response.data.galleryVideo)
+
 //       if (response.data.isSuccess && response.data.galleryVideo) {
 //         setVidList(response.data.galleryVideo);
 //       } else {
@@ -79,8 +210,6 @@ const { width, height } = Dimensions.get("window");
 //     fetchData();
 //   }, []);
 
-
-
 //   const renderVideoItem = ({ item }) => (
 //     <View style={styles.videoContainer}>
 //       <Video
@@ -89,6 +218,7 @@ const { width, height } = Dimensions.get("window");
 //         controls
 //         resizeMode="cover"
 //       />
+//       <Text style={styles.videoTitle}>{item.img_title}</Text>
 //     </View>
 //   );
 //   if (loading) {
@@ -99,9 +229,12 @@ const { width, height } = Dimensions.get("window");
 //     );
 //   }
 
+//   // Get the category title from the first video item (if available)
+//   const categoryTitle = vidList.length > 0 ? vidList[0].img_title : "Videos";
+//   const videoCount = vidList.length;
 
 //   return (
-//     <SafeAreaView style={{ flex: 1,backgroundColor:'#9C27B0' }}>
+//     <SafeAreaView style={{ flex: 1, backgroundColor:'#9C27B0',marginBottom:-30 }}>
 //       {/* Header */}
 //       <View style={styles.container}>
 //         <View style={styles.header}>
@@ -112,40 +245,45 @@ const { width, height } = Dimensions.get("window");
 //         </View>
 
 //         {/* Content */}
-
-
-
 //         <View style={styles.albumContainer}>
 //           <Icon name="image" size={24} color="#2a2a2aff" />
-//           <Text style={styles.albumTitle}>Video - {item.img_title}({item.lemgth})</Text>
+//           <Text style={styles.albumTitle}>
+//             Video - {categoryTitle} ({videoCount})
+//           </Text>
 //           <Divider style={{ backgroundColor: '#f26767ff', height: 1, marginHorizontal: -13, bottom: 10 }} />
 //           <ScrollView contentContainerStyle={styles.content}>
 //             <View style={styles.folderGrid}>
-
-//               <FlatList
-//                 data={vidList}
-//                 renderItem={renderVideoItem}
-//                 keyExtractor={(item, index) => index.toString()}
-//                 numColumns={2}
-//                 columnWrapperStyle={{ justifyContent: "space-between" }}
-//                 contentContainerStyle={{ paddingBottom: 10 }}
-//               />
-
+//               {vidList.length > 0 ? (
+//                 <FlatList
+//                   data={vidList}
+//                   renderItem={renderVideoItem}
+//                   keyExtractor={(item, index) => index.toString()}
+//                   numColumns={2}
+//                   columnWrapperStyle={{ justifyContent: "space-between" }}
+//                   contentContainerStyle={{ paddingBottom: 10 }}
+//                 />
+//               ) : (
+//                 <Text style={styles.noDataText}>No videos available</Text>
+//               )}
 //             </View>
 //           </ScrollView>
 //           <View>
-
 //             <TouchableOpacity
 //               onPress={() => {
 //                 setLoading(true);
 //                 getVideosList().then(() => setLoading(false));
 //               }}
 //             >
-//               <Text style={{ color: "blue", marginTop: 5, fontFamily: fonts.FONT_BOLD, }}>Reload</Text>
+//               <Text style={{ color: "blue", marginTop: 5, fontFamily: fonts.FONT_BOLD }}>
+//                 Reload
+//               </Text>
 //             </TouchableOpacity>
 //           </View>
 //         </View>
-//         <TouchableOpacity style={styles.fab} onPress={() => navigation.navigate('Gallery', { orgid, studentId, mobile })}>
+//         <TouchableOpacity 
+//           style={styles.fab} 
+//           onPress={() => navigation.navigate('Gallery', { orgid, studentId, mobile })}
+//         >
 //           <MaterialIcons name="image" size={28} color="#fff" />
 //         </TouchableOpacity>
 //       </View>
@@ -154,139 +292,280 @@ const { width, height } = Dimensions.get("window");
 // };
 
 // export default VideoViewScreen;
-interface VideoViewScreenProps {
-  route: any
-  navigation: any
+
+// const styles = StyleSheet.create({
+//   container: { flex: 1, backgroundColor: '#fff', width: "100%", },
+
+//   header: {
+//     backgroundColor: '#9C27B0',
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     padding: 15,
+
+//   },
+//   loader: { flex: 1, justifyContent: "center", alignItems: "center" },
+//   headerText: {
+//     fontSize: 18,
+//     color: '#ffffff',
+//     fontFamily: fonts.FONT_BOLD,
+//     marginLeft: 78
+//   },
+//   folderIcon: {
+//     backgroundColor: '#fdd835',
+//     borderRadius: 6,
+//     padding: 4,
+//   },
+//   content: {
+//     padding: 10,
+//   },
+//   videoContainer: {
+//     flex: 1,
+//     margin: 2,
+//     height: 150,
+//     backgroundColor: "#000",
+//   },
+//   video: {
+//     flex: 1,
+//     borderRadius: 20,
+//   },
+//   grid: {
+//     paddingHorizontal: 10,
+//     paddingTop: 10,
+//   },
+//   imageContainer: {
+//     flex: 1,
+//     aspectRatio: 1,
+//     margin: 5,
+//     backgroundColor: '#e0f0ff',
+//     borderRadius: 10,
+//     overflow: 'hidden',
+//   },
+//   image: {
+//     width: '100%',
+//     height: '100%',
+//     resizeMode: 'cover',
+//   },
+//   placeholder: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   albumContainer: {
+//     width: "95%", height: '70%', marginTop: 20, marginLeft: 10,
+//     backgroundColor: '#f5fdd8',
+//     padding: 12,
+//     borderRadius: 8,
+//     borderWidth: 1,
+//     borderColor: '#ff9999',
+
+//   },
+//   albumTitle: {
+//     fontFamily: fonts.ROBOTO_BOLD,
+//     fontSize: 16,
+//     marginBottom: 10, marginLeft: 30, bottom: 23
+//   },
+//   folderGrid: {
+//     flexDirection: 'row',
+//     flexWrap: 'wrap',
+//     justifyContent: 'space-between',
+//   },
+
+//   fab: {
+//     position: 'absolute',
+//     bottom: 90,
+//     right: 22,
+//     backgroundColor: '#9B59B6',
+//     width: 56, height: 56,
+//     borderRadius: 28,
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     elevation: 6,
+//     shadowColor: '#5B2C6F'
+//   },
+// });
+
+
+import React, { useState, useCallback } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
+import { Divider } from 'react-native-paper';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import Video from 'react-native-video';
+import { fonts } from '../../root/config';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
+import MaterialIcons from '@react-native-vector-icons/material-icons';
+
+const { width } = Dimensions.get('window');
+
+// ✅ Typed interface
+interface VideoItem {
+  img_file_name: string;
+  img_title: string;
+  img_id: string;
 }
+
+interface VideoViewScreenProps {
+  route: any;
+  navigation: any;
+}
+
 const VideoViewScreen: React.FC<VideoViewScreenProps> = ({ route, navigation }) => {
-  const { orgid, studentId, mobile, acaid, catid, } = route.params;
-  const [studentData, setStudentData] = useState({});
+  const { orgid, studentId, mobile, acaid, catid, catName } = route.params;
+console.log(route.params,'route.params====>')
   const [loading, setLoading] = useState(true);
-  const [vidList, setVidList] = useState([]);
-  const [isFolder, setIsFolder] = useState("");
+  const [vidList, setVidList] = useState<VideoItem[]>([]);
 
-  // Fetch student data
-  const getStudentData = async () => {
+  // ✅ KEY FIX: useFocusEffect re-fetches every time screen comes into focus.
+  // Clears stale video list so previous category's videos never flash.
+  useFocusEffect(
+    useCallback(() => {
+      setVidList([]);
+      setLoading(true);
+      fetchData();
+    }, [acaid, catid, orgid]) // ✅ re-run when category or year changes
+  );
+
+  const fetchData = async () => {
     try {
-      const loggedIn = await AsyncStorage.getItem("isloggedIn");
-      const mobileNo = await AsyncStorage.getItem("mobile");
+      const mobileNo = await AsyncStorage.getItem('mobile');
 
-      const response = await axios.post(
-        `https://www.vtsmile.in/app/api/students/students_profile_data_api?orgId=${orgid}&studeId=${studentId}&mobile_no=${mobileNo}`
-      );
-
-      if (response.data.isSuccess && response.data.studDetails) {
-        setStudentData(response.data.studDetails[0]);
-      }
-    } catch (err) {
-      console.log(err);
+      // Run both calls concurrently for speed
+      await Promise.all([
+        fetchStudentData(mobileNo),
+        fetchVideosList(),
+      ]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Fetch videos list
-  const getVideosList = async () => {
+  const fetchStudentData = async (mobileNo: string | null) => {
+    try {
+      await axios.post(
+        `https://www.vtsmile.in/app/api/students/students_profile_data_api?orgId=${orgid}&studeId=${studentId}&mobile_no=${mobileNo}`
+      );
+    } catch (error) {
+      console.log('Student data error:', error);
+    }
+  };
+
+  const fetchVideosList = async () => {
     try {
       const response = await axios.post(
         `https://www.vtsmile.in/app/api/students/video_gallery_api?orgId=${orgid}&aca_id=${acaid}&category_id=${catid}`
       );
-
-      if (response.data.isSuccess && response.data.galleryVideo) {
+  //  console.log(response.data.galleryVideo,'response.data.galleryVideo===>')
+      if (response.data.isSuccess && response.data.galleryVideo?.length > 0) {
         setVidList(response.data.galleryVideo);
       } else {
-        setIsFolder("No Data");
+        setVidList([]);
       }
-    } catch (err) {
-      console.log(err);
-      setIsFolder("No Data");
+    } catch (error) {
+      console.log('Videos list error:', error);
+      setVidList([]);
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await getStudentData();
-      await getVideosList();
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
+    const handleGoBack = () => {
+    navigation.navigate('VideoCategory', {
+      orgid,
+      studentId,
+      mobile,
+      acaid,
+    });
+  };
 
-  const renderVideoItem = ({ item }) => (
+  const renderVideoItem = ({ item }: { item: VideoItem }) => (
     <View style={styles.videoContainer}>
       <Video
         source={{ uri: item.img_file_name }}
         style={styles.video}
         controls
         resizeMode="cover"
+        paused // ✅ start paused — don't auto-play all videos at once
       />
-      <Text style={styles.videoTitle}>{item.img_title}</Text>
+      <Text style={styles.videoTitle} numberOfLines={1}>
+        {item.img_title}
+      </Text>
     </View>
   );
+
+  const renderEmptyState = () => (
+    <View style={styles.noData}>
+      <Icon name="videocam-off" size={60} color="#ccc" />
+      <Text style={styles.noDataText}>No Videos Available</Text>
+    </View>
+  );
+
+  const renderListHeader = () => (
+    <View style={styles.listHeader}>
+      <Icon name="videocam" size={20} color="#9C27B0" />
+      {/* ✅ Use catName passed from navigation params — not vidList[0].img_title which is wrong */}
+      <Text style={styles.albumTitle} numberOfLines={1}>
+        {catName ?? 'Videos'} ({vidList.length})
+      </Text>
+    </View>
+  );
+
+  // ✅ Full-screen loading (matches other screens)
   if (loading) {
     return (
-      <View style={styles.loader}>
-        <ActivityIndicator size="large" color="#7200b1" />
-      </View>
+      // <SafeAreaView style={styles.safeArea}>
+       
+        <View style={styles.loader}>
+          <ActivityIndicator size="large" color="#9C27B0" />
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      // </SafeAreaView>
     );
   }
 
-  // Get the category title from the first video item (if available)
-  const categoryTitle = vidList.length > 0 ? vidList[0].img_title : "Videos";
-  const videoCount = vidList.length;
-
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor:'#9C27B0',marginBottom:-30 }}>
+    <SafeAreaView style={styles.safeArea}>
       {/* Header */}
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back" size={24} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.headerText}>Gallery - Videos</Text>
-        </View>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
+          <Icon name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Gallery - Videos</Text>
+      </View>
+ <View style={{flex:1,backgroundColor:'#FFFF',marginBottom:-30}}>
+      {/* Card Container */}
+      <View style={styles.albumContainer}>
+        {/* <Divider style={styles.divider} /> */}
 
-        {/* Content */}
-        <View style={styles.albumContainer}>
-          <Icon name="image" size={24} color="#2a2a2aff" />
-          <Text style={styles.albumTitle}>
-            Video - {categoryTitle} ({videoCount})
-          </Text>
-          <Divider style={{ backgroundColor: '#f26767ff', height: 1, marginHorizontal: -13, bottom: 10 }} />
-          <ScrollView contentContainerStyle={styles.content}>
-            <View style={styles.folderGrid}>
-              {vidList.length > 0 ? (
-                <FlatList
-                  data={vidList}
-                  renderItem={renderVideoItem}
-                  keyExtractor={(item, index) => index.toString()}
-                  numColumns={2}
-                  columnWrapperStyle={{ justifyContent: "space-between" }}
-                  contentContainerStyle={{ paddingBottom: 10 }}
-                />
-              ) : (
-                <Text style={styles.noDataText}>No videos available</Text>
-              )}
-            </View>
-          </ScrollView>
-          <View>
-            <TouchableOpacity
-              onPress={() => {
-                setLoading(true);
-                getVideosList().then(() => setLoading(false));
-              }}
-            >
-              <Text style={{ color: "blue", marginTop: 5, fontFamily: fonts.FONT_BOLD }}>
-                Reload
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <TouchableOpacity 
+        {/* ✅ FlatList only — removed ScrollView wrapper that caused VirtualizedList warning */}
+        <FlatList
+          data={vidList}
+          renderItem={renderVideoItem}
+          // ✅ Use stable img_id as key — not index (index causes re-render issues)
+          keyExtractor={(item) => item.img_id?.toString() ?? Math.random().toString()}
+          numColumns={2}
+          columnWrapperStyle={styles.columnWrapper}
+          contentContainerStyle={styles.flatListContent}
+          ListHeaderComponent={renderListHeader}
+          ListEmptyComponent={renderEmptyState}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+      
+      </View>
+       <TouchableOpacity 
           style={styles.fab} 
           onPress={() => navigation.navigate('Gallery', { orgid, studentId, mobile })}
         >
           <MaterialIcons name="image" size={28} color="#fff" />
         </TouchableOpacity>
-      </View>
     </SafeAreaView>
   );
 };
@@ -294,83 +573,114 @@ const VideoViewScreen: React.FC<VideoViewScreenProps> = ({ route, navigation }) 
 export default VideoViewScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', width: "100%", },
-
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#6A1B9A',
+  },
   header: {
-    backgroundColor: '#9C27B0',
+    backgroundColor: '#6A1B9A',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 15,
-
+    paddingHorizontal: 15,
+    paddingVertical: 12,
   },
-  loader: { flex: 1, justifyContent: "center", alignItems: "center" },
+  backButton: {
+    padding: 4,
+  },
   headerText: {
     fontSize: 18,
     color: '#ffffff',
     fontFamily: fonts.FONT_BOLD,
-    marginLeft: 78
-  },
-  folderIcon: {
-    backgroundColor: '#fdd835',
-    borderRadius: 6,
-    padding: 4,
-  },
-  content: {
-    padding: 10,
-  },
-  videoContainer: {
     flex: 1,
-    margin: 2,
-    height: 150,
-    backgroundColor: "#000",
-  },
-  video: {
-    flex: 1,
-    borderRadius: 20,
-  },
-  grid: {
-    paddingHorizontal: 10,
-    paddingTop: 10,
-  },
-  imageContainer: {
-    flex: 1,
-    aspectRatio: 1,
-    margin: 5,
-    backgroundColor: '#e0f0ff',
-    borderRadius: 10,
-    overflow: 'hidden',
-  },
-  image: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  placeholder: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    textAlign: 'center',
+    marginRight: 28, // offsets back button so title is visually centred
   },
   albumContainer: {
-    width: "95%", height: '70%', marginTop: 20, marginLeft: 10,
+    flex: 1,
     backgroundColor: '#f5fdd8',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
+    marginHorizontal: 10,
+    marginTop: 12,
+    marginBottom: 80,
+    borderRadius: 10,
+    borderWidth: 2,
     borderColor: '#ff9999',
-
+    overflow: 'hidden',
+  },
+  divider: {
+    backgroundColor: '#f26767ff',
+    height: 1,
+  },
+  listHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 12,
   },
   albumTitle: {
     fontFamily: fonts.ROBOTO_BOLD,
-    fontSize: 16,
-    marginBottom: 10, marginLeft: 30, bottom: 23
+    fontSize: 15,
+    color: '#2a2a2a',
+    marginLeft: 8,
+    flexShrink: 1,
   },
-  folderGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+  flatListContent: {
+    paddingHorizontal: 10,
+    paddingBottom: 20,
+    flexGrow: 1,
+  },
+  columnWrapper: {
     justifyContent: 'space-between',
+    marginBottom: 8,
   },
-
-  fab: {
+  videoContainer: {
+    width: width / 2 - 20,
+    marginVertical: 6,
+    backgroundColor: '#000',
+    borderRadius: 8,
+    overflow: 'hidden',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+  },
+  video: {
+    width: '100%',
+    height: 140,
+  },
+  videoTitle: {
+    fontSize: 11,
+    fontFamily: fonts.ROBOTO_BOLD,
+    color: '#fff',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    paddingHorizontal: 6,
+    paddingVertical: 4,
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: '#666',
+    fontFamily: fonts.ROBOTO_BOLD,
+  },
+  noData: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    marginTop: 60,
+  },
+  noDataText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: '#666',
+    fontFamily: fonts.ROBOTO_BOLD,
+  },
+   fab: {
     position: 'absolute',
     bottom: 90,
     right: 22,
@@ -383,5 +693,3 @@ const styles = StyleSheet.create({
     shadowColor: '#5B2C6F'
   },
 });
-
-

@@ -468,7 +468,7 @@ import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { Divider } from "react-native-paper";
- import messaging from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 // import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -530,8 +530,8 @@ const StudentsListScreen = ({ route, navigation }) => {
 
   const Logout = async () => {
     try {
-    await messaging().deleteToken();
-  
+      await messaging().deleteToken();
+
       await AsyncStorage.removeItem("isloggedIn");
       await AsyncStorage.removeItem("mobile");
 
@@ -693,7 +693,7 @@ const StudentsListScreen = ({ route, navigation }) => {
 
         <Text style={styles.footer}>Powered by VT Technologies</Text>
       </LinearGradient>
-      <Modal
+      {/* <Modal
         visible={customAlertVisible}
         transparent
         animationType="fade"
@@ -716,6 +716,49 @@ const StudentsListScreen = ({ route, navigation }) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.confirmButton}
+                onPress={() => {
+                  setCustomAlertVisible(false);
+                  Logout();
+                }}>
+                <Text style={styles.buttonText}>Yes</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal> */}
+      <Modal
+        visible={customAlertVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setCustomAlertVisible(false)}
+      >
+        <View style={styles.modalOverlay5}>
+          <View style={styles.modalContainer5}>
+            {/* Icon */}
+            <View style={styles.iconContainer5}>
+              <MaterialIcons name="crisis-alert" size={24} color="#e53935" style={{ top: 3, marginLeft: 10 }} />
+              <Text style={styles.modalTitle5}>Confirm Logout</Text>
+            </View>
+
+            {/* Divider */}
+            <View style={styles.modalDivider5} />
+
+            {/* Message */}
+            <Text style={styles.modalMessage5}>
+              Are you sure you want to logout?
+            </Text>
+
+            {/* Buttons */}
+            <View style={styles.modalButtonContainer5}>
+              <TouchableOpacity
+                style={[styles.modalButton5, styles.cancelButton5]}
+                onPress={() => setCustomAlertVisible(false)}
+              >
+                <Text style={styles.buttonText}>No</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.modalButton5, styles.confirmButton5]}
                 onPress={() => {
                   setCustomAlertVisible(false);
                   Logout();
@@ -816,6 +859,74 @@ const styles = StyleSheet.create({
     padding: wp("3%"),
     borderWidth: 1,
     borderColor: "#830009",
+  },
+  modalOverlay5: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer5: {
+    width: wp(85),
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  iconContainer5: {
+    flexDirection: 'row'
+  },
+  modalTitle5: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#c34646ff',
+    fontFamily: fonts.FONT_BOLD,
+    marginBottom: 12,
+  },
+  modalDivider5: {
+    height: 1,
+    backgroundColor: '#5b5959ff',
+    width: '115%',
+    marginBottom: 16,
+  },
+  modalMessage5: {
+    fontSize: 16,
+    fontFamily: fonts.FONT_MEDIUM,
+    color: '#5e5d5dff',
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 22,
+  },
+  modalButtonContainer5: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    gap: 12,
+  },
+  modalButton5: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelButton5: {
+    backgroundColor: '#bcc6fbff',
+  },
+  confirmButton5: {
+    backgroundColor: '#e53935',
+  },
+  buttonText5: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+    fontFamily: fonts.FONT_BOLD,
   },
   modalContent: {
     width: '80%',

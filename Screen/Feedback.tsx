@@ -167,7 +167,7 @@ const FeedbackScreen: React.FC<FeedbackScreenProps> = ({ route, navigation }) =>
   );
 
   return (
-    <SafeAreaView style={{flex:1,backgroundColor:'#7c43bd',marginBottom:-25}} >
+    <SafeAreaView style={{flex:1,backgroundColor:'#6A1B9A',marginBottom:-25}} >
       <View style={styles.container}>
       
         <View style={styles.headerBox}>
@@ -267,11 +267,12 @@ const styles = StyleSheet.create({
   },
   listTitle: {
     fontFamily: fonts.ROBOTO_BOLD,
-    fontSize: 16, right: 40
+    fontSize: 16, 
+    // right: 40
   },
   headerBox: {
     flexDirection: 'row',
-    backgroundColor: '#7c43bd', padding: 16,
+    backgroundColor: '#6A1B9A', padding: 16,
   },
   headerText: {
     color: '#fff', fontSize: 20, fontFamily: fonts.FONT_BOLD, marginLeft: 80,

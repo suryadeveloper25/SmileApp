@@ -78,7 +78,7 @@ const AboutScreen: React.FC<AboutScreenProps> = ({ route, navigation }) => {
         Keyboard.dismiss();
       }}
     >
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#730673ff',marginBottom:-30  }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#730673ff', marginBottom: -30 }}>
         <View style={styles.container}>
           {/* Header */}
           <View style={styles.header}>
@@ -131,13 +131,13 @@ const AboutScreen: React.FC<AboutScreenProps> = ({ route, navigation }) => {
               source={require('../assest/ic_notification.png')}
               style={styles.aboutImage}
             />
-            <Text style={styles.aboutTitle}>About SMILE Faculty App</Text>
+            <Text style={styles.aboutTitle}>About SMILE APP</Text>
           </View>
 
           {/* Info Section */}
           <View style={styles.form}>
             <Text style={styles.aboutDescription}>
-              {`SMILE Faculty – ERP provides your school with a branded mobile app available for download on the Google Play Store. This app offers tailored access for management, faculty, students, and parents to engage in their respective activities. Through this app, student attendance can be easily tracked, and can be conveniently processed. Additionally, the app facilitates seamless communication from the management and faculty, ensuring that all school-related updates and activities are effectively shared.`}
+              {`SMILE APP – ERP provides your school with a branded mobile app available for download on the Google Play Store. This app offers tailored access for management, faculty, students, and parents to engage in their respective activities. Through this app, student attendance can be easily tracked, and can be conveniently processed. Additionally, the app facilitates seamless communication from the management and faculty, ensuring that all school-related updates and activities are effectively shared.`}
             </Text>
 
             <Text style={styles.poweredText}>- Powered by VT Technologies</Text>
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     fontSize: hp('2.8%'),
     fontFamily: fonts.FONT_BOLD,
     color: '#fff',
-    marginLeft: wp('35%'),
+    marginLeft: wp('30%'),
   },
   menuWrapper: {
     position: 'absolute',

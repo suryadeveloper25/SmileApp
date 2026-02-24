@@ -131,7 +131,7 @@ const FeedbackNewScreen: React.FC<FeedbackNewScreenProps> = ({ route, navigation
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 ,backgroundColor:'#7c43bd',marginBottom:-30}}>
+    <SafeAreaView style={{ flex: 1 ,backgroundColor:'#6A1B9A',marginBottom:-30}}>
       <View style={styles.container}>
         {/* Student Info */}
 
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    backgroundColor: '#7c43bd', padding: 16,
+    backgroundColor: '#6A1B9A', padding: 16,
   },
   backBtn: { marginLeft: 10, },
   headerText: {

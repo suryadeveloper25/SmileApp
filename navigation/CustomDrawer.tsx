@@ -14,7 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaterialIcons from "@react-native-vector-icons/material-icons";
 import { useDispatch } from "react-redux";
 import { logoutAction } from "../root/userAction";
-  import messaging from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -61,47 +61,47 @@ const CustomDrawer: React.FC<DrawerContentProps> = ({ route, navigation }) => {
 
 
 
-const Logout = async () => {
-  try {
-    // 🔔 Delete FCM token (VERY IMPORTANT)
-    await messaging().deleteToken();
-    console.log("🔥 FCM token deleted on logout");
+  const Logout = async () => {
+    try {
+      // 🔔 Delete FCM token (VERY IMPORTANT)
+      await messaging().deleteToken();
+      console.log("🔥 FCM token deleted on logout");
 
-    // 🧹 Clear local storage
-    await AsyncStorage.multiRemove([
-      "isloggedIn",
-      "mobile",
-      "fcmToken",
-    ]);
+      // 🧹 Clear local storage
+      await AsyncStorage.multiRemove([
+        "isloggedIn",
+        "mobile",
+        "fcmToken",
+      ]);
 
-    // 🧠 Clear redux state
-    dispatch(logoutAction());
+      // 🧠 Clear redux state
+      dispatch(logoutAction());
 
-    // 🔁 Reset navigation
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Login" }],
-    });
+      // 🔁 Reset navigation
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Login" }],
+      });
 
-    showMessage({
-      message: "Logged Out",
-      description: "You have successfully logged out!",
-      type: "success",
-      backgroundColor: "#1E90FF",
-      color: "#FFFFFF",
-    });
-  } catch (e) {
-    console.log("❌ Logout error:", e);
+      showMessage({
+        message: "Logged Out",
+        description: "You have successfully logged out!",
+        type: "success",
+        backgroundColor: "#1E90FF",
+        color: "#FFFFFF",
+      });
+    } catch (e) {
+      console.log("❌ Logout error:", e);
 
-    showMessage({
-      message: "Logout Failed",
-      description: "Something went wrong. Please try again!",
-      type: "danger",
-      backgroundColor: "#FF4C4C",
-      color: "#FFFFFF",
-    });
-  }
-};
+      showMessage({
+        message: "Logout Failed",
+        description: "Something went wrong. Please try again!",
+        type: "danger",
+        backgroundColor: "#FF4C4C",
+        color: "#FFFFFF",
+      });
+    }
+  };
 
   // const Logout = async () => {
   //   try {
@@ -198,11 +198,11 @@ const Logout = async () => {
           setCustomAlertVisible(true)
         )}
 
-        <Text style={styles.versionLabel}>VT Technologies SMILE v16.8</Text>
+        <Text style={styles.versionLabel}>VT Technologies SMILE v18.10</Text>
       </View>
 
       {/* ================= LOGOUT MODAL ================= */}
-      <Modal visible={customAlertVisible} transparent animationType="fade">
+      {/* <Modal visible={customAlertVisible} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
             <View style={{ flexDirection: 'row' }}>
@@ -229,6 +229,47 @@ const Logout = async () => {
               </TouchableOpacity>
             </View>
 
+          </View>
+        </View>
+      </Modal> */}
+      <Modal
+        visible={customAlertVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setCustomAlertVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            {/* Icon */}
+            <View style={styles.iconContainer}>
+              <MaterialIcons name="crisis-alert" size={24} color="#e53935" style={{ top: 3, marginLeft: 10 }} />
+              <Text style={styles.modalTitle}>Confirm Logout</Text>
+            </View>
+
+            {/* Divider */}
+            <View style={styles.modalDivider} />
+
+            {/* Message */}
+            <Text style={styles.modalMessage}>
+              Are you sure you want to logout?
+            </Text>
+
+            {/* Buttons */}
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setCustomAlertVisible(false)}
+              >
+                <Text style={styles.buttonText}>No</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.modalButton, styles.confirmButton]}
+                onPress={() => { setCustomAlertVisible(false); Logout(); }} >
+
+                <Text style={styles.buttonText}>Yes</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -295,7 +336,74 @@ const styles = StyleSheet.create({
     fontSize: hp("2.2%"),
     fontFamily: fonts.ROBOTO_BOLD
   },
-
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: wp(85),
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  iconContainer: {
+    flexDirection: 'row'
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#c34646ff',
+    fontFamily: fonts.FONT_BOLD,
+    marginBottom: 12,
+  },
+  modalDivider: {
+    height: 1,
+    backgroundColor: '#5b5959ff',
+    width: '115%',
+    marginBottom: 16,
+  },
+  modalMessage: {
+    fontSize: 16,
+    fontFamily: fonts.FONT_MEDIUM,
+    color: '#5e5d5dff',
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 22,
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    gap: 12,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#bcc6fbff',
+  },
+  confirmButton: {
+    backgroundColor: '#e53935',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+    fontFamily: fonts.FONT_BOLD,
+  },
   menuContainer: {
     flex: 1,
     marginTop: hp("2%"),
@@ -338,12 +446,12 @@ const styles = StyleSheet.create({
     fontFamily: fonts.ROBOTO_BOLD
   },
 
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.6)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
+  // modalOverlay: {
+  //   flex: 1,
+  //   backgroundColor: "rgba(0,0,0,0.6)",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // },
 
   modalBox: {
     width: wp("80%"),
@@ -353,11 +461,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  modalTitle: {
-    fontSize: hp("2.5%"),
-    color: "#c34646",
-    fontWeight: "bold",
-  },
+  // modalTitle: {
+  //   fontSize: hp("2.5%"),
+  //   color: "#c34646",
+  //   fontWeight: "bold",
+  // },
 
   modalMsg: {
     fontSize: hp("2%"),

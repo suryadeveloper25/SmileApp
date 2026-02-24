@@ -13,7 +13,8 @@ import {
   Pressable,
   Dimensions,
   Alert,
-  StatusBar
+  StatusBar,
+  ActivityIndicator
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -29,6 +30,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width, height } = Dimensions.get('window');
 
+const BASE_WIDTH = 375;
+const scale = (size: number) => Math.round((width / BASE_WIDTH) * size);
+const clamp = (val: number, min: number, max: number) => Math.min(Math.max(val, min), max);
+const sp = (size: number) => clamp(scale(size), size * 0.8, size * 1.2);
+
+const C = {
+  primary:       '#6A1B9A',
+  primaryLight:  '#8E24AA',
+  primaryDark:   '#4A0072',
+  surface:       '#FFFFFF',
+  background:    '#F3EDF7',
+   textSecondary: '#5D4E6D',
+}
 const gridItems = [
   {
     title: 'My Attendance', icon: require('../assest/immigration_3125932.png'), screen: 'Attendance',
@@ -150,11 +164,23 @@ const HomeScreen: React.FC<any> = ({ navigation, route }) => {
 
   checkNotification();
 }, []);
-  if (loading) return <Text style={{ textAlign: 'center', marginTop: hp(40) }}>Loading...</Text>;
+
+ if (loading) {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.loaderContainer}>
+          <View style={styles.loaderCard}>
+            <ActivityIndicator size={44} color={C.primary} />
+            <Text style={styles.loaderText}>Loading...</Text>
+          </View>
+        </View>
+      </SafeAreaView>
+    );
+  }
+  // if (loading) return <Text style={{ textAlign: 'center', marginTop: hp(40) }}>Loading...</Text>;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar backgroundColor="black" barStyle="light-content" />
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={{flex:1,backgroundColor:'#fff'}}>
       <View >
         <LinearGradient
@@ -278,7 +304,7 @@ const HomeScreen: React.FC<any> = ({ navigation, route }) => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-safeArea: { flex: 1},
+safeArea: { flex: 1,},
   header: {
     width: '100%',
     height: hp(8),
@@ -288,6 +314,28 @@ safeArea: { flex: 1},
     paddingHorizontal: wp(4),
     justifyContent: 'space-between'
   },
+   loaderContainer: {
+      flex: 1,
+      backgroundColor: C.background,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    loaderCard: {
+      backgroundColor: C.surface,
+      borderRadius: sp(20),
+      padding: sp(36),
+      alignItems: 'center',
+      shadowColor: C.primary,
+      shadowOpacity: 0.12,
+      shadowRadius: 16,
+      elevation: 6,
+    },
+    loaderText: {
+      marginTop: sp(14),
+      fontSize: sp(14),
+      color: C.textSecondary,
+      fontFamily: fonts.FONT_MEDIUM,
+    },
   headerLogos: { flexDirection: 'row', alignItems: 'center', gap: wp(2), right: wp('25%') },
   logoSmall: { width: wp(30), height: wp(10), resizeMode: 'contain' },
   logoLarge: { width: wp(10), height: wp(10), resizeMode: 'contain', left: wp('1%') },

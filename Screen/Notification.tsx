@@ -269,7 +269,7 @@ const isValidAudioUrl = (url?: string) => {
 
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#7c43bd', }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#6A1B9A', }}>
       <View style={styles.container}>
         <View style={styles.headerBar}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -415,7 +415,7 @@ const styles = StyleSheet.create({
   headerBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#7c43bd',
+    backgroundColor: '#6A1B9A',
     paddingVertical: 12,
     paddingHorizontal: 16,
     height: 60, marginBottom: 40

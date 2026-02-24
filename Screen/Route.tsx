@@ -1382,7 +1382,7 @@ const RouteScreen: React.FC<BusRouteProps> = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  main: { flex: 1, backgroundColor: '#7c43bd' },
+  main: { flex: 1, backgroundColor: '#6A1B9A' },
   stopChip: {
     padding: 8,
     top: 5,
@@ -1530,7 +1530,7 @@ const styles = StyleSheet.create({
 
   header: {
     height: hp(7),
-    backgroundColor: "#7c43bd",
+    backgroundColor: "#6A1B9A",
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: wp(4),
