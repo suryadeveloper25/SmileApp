@@ -3228,6 +3228,7 @@ import { generatePDF } from 'react-native-html-to-pdf';
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { showMessage } from "react-native-flash-message";
 
 // ─── Responsive helpers ──────────────────────────────────────────────────────
 const { width, height } = Dimensions.get('window');
@@ -3365,13 +3366,13 @@ const BillDetailsScreen: React.FC<BillDetailsScreenProps> = ({ route, navigation
   const loadInstitutes = async () => {
     try {
       const storedMobile = await AsyncStorage.getItem("mobile")
-      console.log(storedMobile, '=========stored mobile')
+      // console.log(storedMobile, '=========stored mobile')
       const url = `https://www.vtsmile.in/app/api/students/institute_list_api?mobile_no=${storedMobile}`;
       const response = await axios.post(url);
 
       if (response.status === 200 && response.data?.isSuccess) {
         setOrgList(response.data.orgList || []);
-        console.log('Institute list loaded:', response.data.orgList);
+        // console.log('Institute list loaded:', response.data.orgList);
       }
     } catch (e) {
       console.error('Error loading institutes:', e);
@@ -3436,7 +3437,7 @@ const BillDetailsScreen: React.FC<BillDetailsScreenProps> = ({ route, navigation
         }
       );
 
-      console.log(response.data.data, '-----------response.data.data');
+      // console.log(response.data.data, '-----------response.data.data');
 
       if (response?.data?.isSuccess && response?.data?.data) {
         const data = Array.isArray(response.data.data) ? response.data.data : [];
@@ -3454,7 +3455,7 @@ const BillDetailsScreen: React.FC<BillDetailsScreenProps> = ({ route, navigation
               orgLogo: matchedSchool.orgLogo || '',
               orgId: matchedSchool.orgId || '',
             });
-            console.log('School data found:', matchedSchool);
+            // console.log('School data found:', matchedSchool);
           } else {
             console.log('No matching school found for orgId:', bill.orgId);
           }
@@ -3818,69 +3819,155 @@ const BillDetailsScreen: React.FC<BillDetailsScreenProps> = ({ route, navigation
    * Download bill receipt as PDF
    */
   const downloadBillReceipt = async (): Promise<void> => {
-    if (!bill || !billDetails || billDetails.length === 0) {
-      Alert.alert('Error', 'No bill data available to download.');
-      return;
+  if (!bill || !billDetails || billDetails.length === 0) {
+    showMessage({
+      message: "Error",
+      description: "No bill data available to download.",
+      type: "danger",
+      backgroundColor: "#FF6B00",
+      color: "#FFFFFF",
+    });
+    return;
+  }
+
+  setIsDownloading(true);
+  try {
+    const htmlContent = generateBillHTML(billDetails, schoolData);
+
+    if (!htmlContent || htmlContent.trim().length === 0) {
+      throw new Error('HTML content is empty');
     }
 
-    setIsDownloading(true);
-    try {
-      // ✅ FIXED: Pass schoolData to the HTML generation function
-      const htmlContent = generateBillHTML(billDetails, schoolData);
+    const fileName = `Bill_${bill.billNo}_${bill.billDate.replace(/\//g, '-')}`;
 
-      if (!htmlContent || htmlContent.trim().length === 0) {
-        throw new Error('HTML content is empty');
-      }
+    const pdf = await generatePDF({
+      html: htmlContent,
+      fileName: fileName,
+      base64: false,
+    });
 
-      const fileName = `Bill_${bill.billNo}_${bill.billDate.replace(/\//g, '-')}`;
-
-      const pdf = await generatePDF({
-        html: htmlContent,
-        fileName: fileName,
-        base64: false,
-      });
-
-      if (pdf && pdf.filePath) {
-        const destinationPath = Platform.OS === 'android'
+    if (pdf && pdf.filePath) {
+      const destinationPath =
+        Platform.OS === 'android'
           ? `${RNFS.DownloadDirectoryPath}/${fileName}.pdf`
           : `${RNFS.DocumentDirectoryPath}/${fileName}.pdf`;
 
-        await RNFS.copyFile(pdf.filePath, destinationPath);
+      await RNFS.copyFile(pdf.filePath, destinationPath);
 
-        try {
-          await Share.open({
-            url: Platform.OS === 'android'
+      try {
+        await Share.open({
+          url:
+            Platform.OS === 'android'
               ? `file://${destinationPath}`
               : destinationPath,
-            type: 'application/pdf',
-            title: 'Share Bill Receipt',
-            message: 'Here is your bill receipt',
-            failOnCancel: false,
-          });
-        } catch (shareError) {
-          console.log('Share cancelled or error:', shareError);
-        }
+          type: 'application/pdf',
+          title: 'Share Bill Receipt',
+          message: 'Here is your bill receipt',
+          failOnCancel: false,
+        });
+      } catch (shareError) {
+        console.log('Share cancelled or error:', shareError);
+      }
 
-        Alert.alert(
-          'Success',
+      // ✅ Fixed: clean description string using a ternary
+      showMessage({
+        message: "Success",
+        description:
           Platform.OS === 'android'
             ? `Bill receipt downloaded!\n\nFile: ${fileName}.pdf\n\nLocation: Downloads folder`
             : `Bill receipt generated!\n\nFile: ${fileName}.pdf`,
-          [{ text: 'OK', onPress: () => { } }]
-        );
-      } else {
-        Alert.alert('Error', 'Failed to generate PDF file. Please try again.');
-      }
-    } catch (error) {
-      console.log('Error generating PDF:', error);
-      Alert.alert(
-        'Error',
-        `Failed to generate bill receipt.\n\nError: ${error instanceof Error ? error.message : 'Unknown error'}`
-      );
-    } finally {
-      setIsDownloading(false);
+        type: "success",
+      });
+    } else {
+      // ✅ Fixed: consistent error UI
+      showMessage({
+        message: "Error",
+        description: "Failed to generate PDF file. Please try again.",
+        type: "danger",
+        backgroundColor: "#FF6B00",
+        color: "#FFFFFF",
+      });
     }
-  };
+  } catch (error) {
+    console.log('Error generating PDF:', error);
+    // ✅ Fixed: replaced Alert.alert with showMessage
+    showMessage({
+      message: "Error",
+      description: `Failed to generate bill receipt.\n\n${
+        error instanceof Error ? error.message : 'Unknown error'
+      }`,
+      type: "danger",
+      backgroundColor: "#FF6B00",
+      color: "#FFFFFF",
+    });
+  } finally {
+    setIsDownloading(false);
+  }
+};
+  // const downloadBillReceipt = async (): Promise<void> => {
+  //   if (!bill || !billDetails || billDetails.length === 0) {
+  //     Alert.alert('Error', 'No bill data available to download.');
+  //     return;
+  //   }
+
+  //   setIsDownloading(true);
+  //   try {
+  //     // ✅ FIXED: Pass schoolData to the HTML generation function
+  //     const htmlContent = generateBillHTML(billDetails, schoolData);
+
+  //     if (!htmlContent || htmlContent.trim().length === 0) {
+  //       throw new Error('HTML content is empty');
+  //     }
+
+  //     const fileName = `Bill_${bill.billNo}_${bill.billDate.replace(/\//g, '-')}`;
+
+  //     const pdf = await generatePDF({
+  //       html: htmlContent,
+  //       fileName: fileName,
+  //       base64: false,
+  //     });
+
+  //     if (pdf && pdf.filePath) {
+  //       const destinationPath = Platform.OS === 'android'
+  //         ? `${RNFS.DownloadDirectoryPath}/${fileName}.pdf`
+  //         : `${RNFS.DocumentDirectoryPath}/${fileName}.pdf`;
+
+  //       await RNFS.copyFile(pdf.filePath, destinationPath);
+
+  //       try {
+  //         await Share.open({
+  //           url: Platform.OS === 'android'
+  //             ? `file://${destinationPath}`
+  //             : destinationPath,
+  //           type: 'application/pdf',
+  //           title: 'Share Bill Receipt',
+  //           message: 'Here is your bill receipt',
+  //           failOnCancel: false,
+  //         });
+  //       } catch (shareError) {
+  //         console.log('Share cancelled or error:', shareError);
+  //       }
+
+  //       Alert.alert(
+  //         'Success',
+  //         Platform.OS === 'android'
+  //           ? `Bill receipt downloaded!\n\nFile: ${fileName}.pdf\n\nLocation: Downloads folder`
+  //           : `Bill receipt generated!\n\nFile: ${fileName}.pdf`,
+  //         [{ text: 'OK', onPress: () => { } }]
+  //       );
+  //     } else {
+  //       Alert.alert('Error', 'Failed to generate PDF file. Please try again.');
+  //     }
+  //   } catch (error) {
+  //     console.log('Error generating PDF:', error);
+  //     Alert.alert(
+  //       'Error',
+  //       `Failed to generate bill receipt.\n\nError: ${error instanceof Error ? error.message : 'Unknown error'}`
+  //     );
+  //   } finally {
+  //     setIsDownloading(false);
+  //   }
+  // };
 
   const BillInfoRow = ({
     label,

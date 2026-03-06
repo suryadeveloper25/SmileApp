@@ -274,7 +274,7 @@ const HomeworkScreen: React.FC<HomeworkScreenProps> = ({ route, navigation }) =>
         </View>
 
         {/* Toggle Button Group */}
-        <View style={{ backgroundColor: '#8659e5', width: "95%", height: 70, marginTop: 20, marginLeft: 10, borderRadius: 15 }}>
+        <View style={styles.tabWrapper}>
           <View style={styles.tabContainer}>
             <TouchableOpacity
               style={activeTab === 'Homework' ? styles.activeTab : styles.inactiveTab}
@@ -327,7 +327,10 @@ const HomeworkScreen: React.FC<HomeworkScreenProps> = ({ route, navigation }) =>
         </View>
 
 
-        <ScrollView style={styles.homeworkContent}>
+        <ScrollView 
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+        style={styles.homeworkContent}>
           {activeTab === 'Homework' ? (
             homeworkList.length === 0 ? (
               <View style={styles.emptyHomework}>
@@ -407,6 +410,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 2,
   },
+  scrollContent: { paddingBottom: 100 },
   homeworkSubject: {
     fontWeight: 'bold',
     fontSize: 16,
@@ -422,7 +426,8 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     resizeMode: 'contain',
-    top: 4
+    top: 4,
+    right:8,
   },
   header: {
     flexDirection: 'row',
@@ -456,38 +461,58 @@ const styles = StyleSheet.create({
     margin: 12,
 
   },
+  tabWrapper:{
+    backgroundColor: '#e2d6e3', width: "95%", height: 70,
+     marginTop: 20, marginLeft: 10, borderRadius: 15,elevation: 3,
+     shadowColor: '#6A1B9A',shadowOffset: { width: 0, height: 2 },shadowOpacity: 0.12, 
+  },
   activeTab: {
     width: '50%',
-    backgroundColor: '#ffb2d5',
+    backgroundColor: '#6A1B9A',
     alignItems: 'center',
-    paddingVertical: 10,
-    borderRadius: 10
+    paddingVertical: 12,
+    borderRadius: 10,
+    elevation: 4,
+    shadowColor: '#6A1B9A',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
   },
   activeTab1: {
     width: '50%',
     marginLeft: 5,
-    backgroundColor: '#ffb2d5',
+    backgroundColor: '#6A1B9A',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderRadius: 10,
-
+    elevation: 3,
+    shadowColor: '#6A1B9A',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
   },
   inactiveTab1: {
     width: '50%',
-    backgroundColor: '#e0daf7',
+    backgroundColor: '#ffffffdf',
     alignItems: 'center',
     paddingVertical: 10,
     borderRadius: 10,
     marginLeft: 5,
+    elevation: 3,
+    shadowColor: '#ffffffdf',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
   },
   inactiveTab: {
     width: '50%',
-    backgroundColor: '#e0daf7',
+    backgroundColor: '#ffffffdf',
     alignItems: 'center',
     paddingVertical: 10,
     borderRadius: 10,
+    elevation: 3,
+    shadowColor: '#ffffffdf',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
   },
-  activeTabText: { color: '#683ab7', fontFamily: fonts.ROBOTO_BOLD, fontSize: 16 },
+  activeTabText: { color: '#ffffff', fontFamily: fonts.ROBOTO_BOLD, fontSize: 16 },
   inactiveTabText: { color: '#ad97ef', fontFamily: fonts.ROBOTO_BOLD, fontSize: 16 },
   calendarWrapper: { marginHorizontal: 16, marginVertical: 2 },
   homeworkContent: { marginTop: 4, flex: 1 },

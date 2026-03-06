@@ -609,7 +609,7 @@ const InstituteListScreen: React.FC = () => {
 
       if (response.status === 200 && response.data?.isSuccess) {
         setOrgList(response.data.orgList || []);
-        console.log('response.data.orgList==>', response.data.orgList);
+        // console.log('response.data.orgList==>', response.data.orgList);
       }
     } catch (e) {
       console.error(e);
