@@ -1076,7 +1076,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,0.2)",
     borderRadius: wp(3),
     padding: wp(5),
-    marginVertical: hp(12),
+    marginVertical: hp(2),
   },
   card: {
     backgroundColor: "#fff",

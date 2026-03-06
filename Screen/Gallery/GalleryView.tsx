@@ -382,6 +382,15 @@ const GalleryImageScreen: React.FC<GalleryImageScreenProps> = ({ route, navigati
             showsVerticalScrollIndicator={false}
           />
         )}
+
+        <TouchableOpacity
+        style={styles.fab}
+        onPress={() => navigation.navigate('Video', { orgid, studentId, mobile })}
+        activeOpacity={0.8}
+      >
+        <Icon name="videocam" size={20} color="#FFD700" />
+        <Text style={styles.fabText}>Videos</Text>
+      </TouchableOpacity>
       </View>
 
       {/* ✅ Full-screen image viewer — uses derived viewerImages, not separate state */}
@@ -393,14 +402,6 @@ const GalleryImageScreen: React.FC<GalleryImageScreenProps> = ({ route, navigati
       />
 
     
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => navigation.navigate('Video', { orgid, studentId, mobile })}
-        activeOpacity={0.8}
-      >
-        <Icon name="videocam" size={20} color="#FFD700" />
-        <Text style={styles.fabText}>Videos</Text>
-      </TouchableOpacity>
       </View>
     </SafeAreaView>
   );

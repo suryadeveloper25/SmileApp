@@ -1708,9 +1708,9 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingHorizontal: moderateScale(16),
     paddingVertical: moderateScale(16),
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#E8E8E8',
+    // backgroundColor: '#fff',
+    // borderTopWidth: 1,
+    // borderTopColor: '#E8E8E8',
     bottom: 30
   },
   submitButton: {

@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -20,6 +21,12 @@ import { fonts } from "../root/config";
 import { useFocusEffect } from "@react-navigation/native";
 import { showMessage } from "react-native-flash-message";
 // import { useNavigation, useRoute } from "@react-navigation/native";
+
+const { width, height } = Dimensions.get('window');
+
+const BASE = 375;
+const scale = (n: number) => Math.round((width / BASE) * n);
+const sp = (n: number) => Math.min(Math.max(scale(n), n * 0.78), n * 1.22);
 
 interface FeedbackNewScreenProps {
   route: any
@@ -129,7 +136,23 @@ const FeedbackNewScreen: React.FC<FeedbackNewScreenProps> = ({ route, navigation
       </View>
     );
   }
+  const ProfileCard = () => (
+    <View style={styles.profileCard}>
 
+      <Text style={styles.studentName}>{student.stud_name || '—'}</Text>
+      <View style={styles.badgesRow}>
+        <View style={styles.badge}>
+          <Icon name="group" size={sp(12)} color="#fffffff7" />
+          <Text style={styles.badgeText}>Class: {student.std_name} {student.section}</Text>
+        </View>
+        <View style={styles.badgeDot} />
+        <View style={styles.badge}>
+          <Icon name="format-list-numbered" size={sp(12)} color="#fffffff7" />
+          <Text style={styles.badgeText}>Roll: {student.rollNo}</Text>
+        </View>
+      </View>
+    </View>
+  );
   return (
     <SafeAreaView style={{ flex: 1 ,backgroundColor:'#6A1B9A',marginBottom:-30}}>
       <View style={styles.container}>
@@ -142,14 +165,17 @@ const FeedbackNewScreen: React.FC<FeedbackNewScreenProps> = ({ route, navigation
           </TouchableOpacity>
           <Text style={styles.headerText}>Feedback</Text>
         </View>
+        <View style={{padding:10,marginTop:10}}>
+         <ProfileCard />
+        </View>
 
-        <View style={styles.headerBox}>
+        {/* <View style={styles.headerBox}>
           <Text style={styles.name}>{student?.stud_name?.toUpperCase()}</Text>
           <Text style={styles.subText}>
             Class: {student?.std_name} {student?.section} | Roll No:{" "}
             {student?.rollNo}
           </Text>
-        </View>
+        </View> */}
 
         {/* Feedback Form */}
         <View style={styles.card}>
@@ -239,6 +265,70 @@ const styles = StyleSheet.create({
     marginTop: 6,
     fontFamily: fonts.ROBOTO_BOLD,
   },
+    profileCard: {
+      backgroundColor: "#6A1B9A",
+      borderRadius: sp(20),
+      paddingVertical: sp(20),
+      paddingHorizontal: sp(16),
+      alignItems: 'center',
+      marginBottom: sp(14),
+      shadowColor: '#000',
+      shadowOpacity: 0.18,
+      shadowOffset: { width: 0, height: 4 },
+      shadowRadius: 12,
+      elevation: 5,
+    },
+    avatar: {
+      width: sp(56),
+      height: sp(56),
+      borderRadius: sp(28),
+      backgroundColor: 'rgba(255,255,255,0.2)',
+      borderWidth: 2,
+      borderColor: 'rgba(255,255,255,0.45)',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: sp(9),
+    },
+    avatarLetter: {
+      fontSize: sp(26),
+      color: '#fff',
+      fontFamily: fonts.FONT_BOLD,
+    },
+    studentName: {
+      color: '#fff',
+      fontSize: sp(17),
+      fontFamily: fonts.FONT_BOLD,
+      letterSpacing: 0.4,
+      textAlign: 'center',
+      marginBottom: sp(7),
+    },
+    badgesRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      gap: sp(6),
+    },
+    badge: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: 'rgba(255,255,255,0.15)',
+      borderRadius: sp(20),
+      paddingHorizontal: sp(10),
+      paddingVertical: sp(4),
+      gap: sp(4),
+    },
+    badgeText: {
+      color: '#ffffff',
+      fontSize: sp(12),
+      fontFamily: fonts.FONT_MEDIUM,
+    },
+    badgeDot: {
+      width: sp(4),
+      height: sp(4),
+      borderRadius: sp(2),
+      backgroundColor: 'rgba(255,255,255,0.35)',
+    },
   card: {
     height: 370,
     margin: 16,

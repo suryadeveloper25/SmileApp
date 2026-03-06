@@ -44,6 +44,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { parseNotifyDate } from '../Screen/badgeService';
 import StopListScreen from '../Screen/Listview';
+import BillsListScreen from '../Screen/BillsList';
+import BillDetailsScreen from '../Screen/BillDetails';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Dimensions } from 'react-native';
 
@@ -77,6 +79,8 @@ export const ApplicationNavigator: React.FC = () => {
       <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Newleave" component={NewLeaveScreen} options={{ headerShown: false }} />
       <Stack.Screen name="StopListScreen" component={StopListScreen} options={{ headerShown: false }} />
+       <Stack.Screen name="BillsList" component={BillsListScreen} options={{ headerShown: false }} /> 
+      <Stack.Screen name="BillDetails" component={BillDetailsScreen} options={{ headerShown: false }} /> 
     </Stack.Navigator>
   );
 }
@@ -309,6 +313,8 @@ export const DrawerNav: React.FC = ({ route }) => {
       <Drawer.Screen name="VideoViewScreen" component={VideoViewScreen} options={{ headerShown: false }} />
       <Drawer.Screen name="leave" component={LeavesScreen} options={{ headerShown: false }} />
       <Drawer.Screen name="StopListScreen" component={StopListScreen} options={{ headerShown: false }} />
+      <Drawer.Screen name="BillsList" component={BillsListScreen} options={{ headerShown: false }} /> 
+      <Drawer.Screen name="BillDetails" component={BillDetailsScreen} options={{ headerShown: false }} />
     </Drawer.Navigator>
   )
 }

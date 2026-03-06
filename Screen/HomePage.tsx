@@ -167,14 +167,14 @@ const HomeScreen: React.FC<any> = ({ navigation, route }) => {
 
  if (loading) {
     return (
-      <SafeAreaView style={styles.safeArea}>
+      // <SafeAreaView style={styles.safeArea}>
         <View style={styles.loaderContainer}>
           <View style={styles.loaderCard}>
             <ActivityIndicator size={44} color={C.primary} />
             <Text style={styles.loaderText}>Loading...</Text>
           </View>
         </View>
-      </SafeAreaView>
+      // </SafeAreaView>
     );
   }
   // if (loading) return <Text style={{ textAlign: 'center', marginTop: hp(40) }}>Loading...</Text>;
@@ -201,7 +201,8 @@ const HomeScreen: React.FC<any> = ({ navigation, route }) => {
         </LinearGradient>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}
+       showsVerticalScrollIndicator={false}>
         <View>
           <LinearGradient
             colors={['#F1D302', '#8f885dff']}
