@@ -533,13 +533,14 @@ const CustomDrawer: React.FC<DrawerContentProps> = ({ route, navigation }) => {
   const Logout = async () => {
     try {
       await messaging().deleteToken();
-      console.log("🔥 FCM token deleted on logout");
 
-      await AsyncStorage.multiRemove([
-        "isloggedIn",
-        "mobile",
-        "fcmToken",
-      ]);
+      await AsyncStorage.removeItem("isloggedIn");
+      await AsyncStorage.removeItem("mobile");
+      // await AsyncStorage.multiRemove([
+      //   "isloggedIn",
+      //   "mobile",
+      //   "fcmToken",
+      // ]);
 
       dispatch(logoutAction());
 
@@ -647,7 +648,7 @@ const CustomDrawer: React.FC<DrawerContentProps> = ({ route, navigation }) => {
       </ScrollView>
 
       {/* ================= VERSION LABEL ================= */}
-      <Text style={styles.versionLabel}>VT Technologies SMILE v18.13</Text>
+      <Text style={styles.versionLabel}>VT Technologies SMILE v19.11</Text>
 
       {/* ================= LOGOUT CONFIRMATION MODAL ================= */}
       <Modal

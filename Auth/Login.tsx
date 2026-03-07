@@ -562,7 +562,7 @@ const LoginScreen = () => {
       tokenForm.append("studId", studId.toString());
       tokenForm.append("mobile", mobile);
       tokenForm.append("token", token);
-      console.log("tokenform==>", tokenForm)
+      // console.log("tokenform==>", tokenForm)
 
       const tokenRes = await axios.post(
         "https://www.vtsmile.in/app/api/students/student_token_save_api",
