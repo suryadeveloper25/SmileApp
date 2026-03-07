@@ -4376,7 +4376,7 @@ const styles = StyleSheet.create({
     color: COLORS.error,
   },
   feeDetailCard: {
-    backgroundColor: 'rgba(255,255,255,0.6)',
+    backgroundColor: 'rgba(255, 255, 255, 0.79)',
     borderRadius: normalize(10),
     padding: wp(3),
     marginBottom: hp(1),

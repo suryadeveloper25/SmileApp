@@ -29,6 +29,8 @@ export type ApplicationStackParamList = {
     Newleave: undefined;
     StopListScreen: undefined;
     VideoViewScreen: undefined;
+    BillsList: undefined;
+    BillDetails: undefined;
 
 };
 
@@ -88,6 +90,8 @@ export type DrawerNaviagtorParamList = {
     ResetPasswordScreen: undefined;
     Newleave: undefined;
     StopListScreen: undefined;
+    BillsList: undefined;
+    BillDetails: undefined;
 }
 
 export type DrawerNaviagtorScreenProps = DrawerNavigationProp<DrawerNaviagtorParamList>;
